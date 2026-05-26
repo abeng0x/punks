@@ -34,8 +34,8 @@ body{
   background:
     radial-gradient(
       circle at top,
-      #1f2937,
-      #050505 70%
+      #111827,
+      #030303 70%
     );
 
   font-family:Arial;
@@ -103,8 +103,6 @@ h1{
 .stats p{
 
   margin:10px 0;
-
-  color:white;
 }
 
 .progress-container{
@@ -318,11 +316,18 @@ const METADATA_URI =
 
 const MAX_SUPPLY = 100;
 
-const ARC_CHAIN_ID = '0x4ce3d2';
+const ARC_CHAIN_ID = '0x4cf932';
 
 let signer;
 
 async function switchToArcNetwork(){
+
+  if(!window.ethereum){
+
+    alert('Install MetaMask');
+
+    return;
+  }
 
   try{
 
@@ -339,81 +344,92 @@ async function switchToArcNetwork(){
 
   }catch(err){
 
-    await window.ethereum.request({
+    try{
 
-      method:'wallet_addEthereumChain',
+      await window.ethereum.request({
 
-      params:[
+        method:'wallet_addEthereumChain',
 
-        {
+        params:[
 
-          chainId:ARC_CHAIN_ID,
+          {
 
-          chainName:'Arc Testnet',
+            chainId:ARC_CHAIN_ID,
 
-          nativeCurrency:{
+            chainName:'Arc Testnet',
 
-            name:'USDC',
+            nativeCurrency:{
 
-            symbol:'USDC',
+              name:'USDC',
 
-            decimals:18
-          },
+              symbol:'USDC',
 
-          rpcUrls:[
-            'https://rpc.testnet.arc.network'
-          ],
+              decimals:18
+            },
 
-          blockExplorerUrls:[
-            'https://testnet.arcscan.app'
-          ]
-        }
-      ]
-    });
+            rpcUrls:[
+              'https://rpc.testnet.arc.network'
+            ],
+
+            blockExplorerUrls:[
+              'https://testnet.arcscan.app'
+            ]
+          }
+        ]
+      });
+
+    }catch(addError){
+
+      console.log(addError);
+
+      alert('Failed to add ARC network');
+    }
   }
 }
 
 async function connectWallet(){
 
-  if(!window.ethereum){
+  try{
 
-    alert('Install MetaMask');
+    await switchToArcNetwork();
 
-    return;
-  }
+    await window.ethereum.request({
 
-  await switchToArcNetwork();
+      method:'eth_requestAccounts'
+    });
 
-  await window.ethereum.request({
+    const provider =
+      new ethers.BrowserProvider(
+        window.ethereum
+      );
 
-    method:'eth_requestAccounts'
-  });
+    signer =
+      await provider.getSigner();
 
-  const provider =
-    new ethers.BrowserProvider(
-      window.ethereum
-    );
+    const address =
+      await signer.getAddress();
 
-  signer =
-    await provider.getSigner();
+    document
+      .getElementById(
+        'address'
+      )
+      .innerText =
 
-  const address =
-    await signer.getAddress();
-
-  document
-    .getElementById(
-      'address'
-    )
-    .innerText =
-
-    `Connected:
+      `Connected:
 ${address.slice(0,6)}...${address.slice(-4)}`;
 
-  checkNetwork();
+    await checkNetwork();
 
-  loadSupply();
+    await loadSupply();
 
-  loadOwnedNFTs();
+    await loadOwnedNFTs();
+
+  }catch(err){
+
+    console.log(err);
+
+    alert(err.message);
+  }
 }
 
 async function checkNetwork(){
@@ -425,9 +441,13 @@ async function checkNetwork(){
     });
 
   if(
+
     chainId.toLowerCase()
+
     ===
+
     ARC_CHAIN_ID.toLowerCase()
+
   ){
 
     document
@@ -453,6 +473,8 @@ async function checkNetwork(){
 async function loadSupply(){
 
   try{
+
+    if(!window.ethereum) return;
 
     const provider =
       new ethers.BrowserProvider(
@@ -551,14 +573,14 @@ async function mintNFT(){
     return;
   }
 
-  await switchToArcNetwork();
-
-  const mintButton =
-    document.getElementById(
-      'mint'
-    );
-
   try{
+
+    await switchToArcNetwork();
+
+    const mintButton =
+      document.getElementById(
+        'mint'
+      );
 
     mintButton.disabled = true;
 
@@ -592,21 +614,38 @@ async function mintNFT(){
       '_blank'
     );
 
-    loadSupply();
+    await loadSupply();
 
-    loadOwnedNFTs();
+    await loadOwnedNFTs();
+
+    setTimeout(()=>{
+
+      mintButton.disabled = false;
+
+      mintButton.innerText =
+        'Mint NFT';
+
+    },3000);
 
   }catch(err){
 
     console.log(err);
 
     alert(err.message);
+
+    document
+      .getElementById(
+        'mint'
+      )
+      .disabled = false;
+
+    document
+      .getElementById(
+        'mint'
+      )
+      .innerText =
+        'Mint NFT';
   }
-
-  mintButton.disabled = false;
-
-  mintButton.innerText =
-    'Mint NFT';
 }
 
 document
