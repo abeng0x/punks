@@ -194,6 +194,8 @@ button:hover {
   margin-top: 12px;
 
   font-size: 14px;
+
+  word-break: break-all;
 }
 
 a {
@@ -222,8 +224,8 @@ a {
 
   <div class="stats">
 
-    <p id="price">
-      Mint Price: 50 USDC
+    <p>
+      Mint Price: FREE
     </p>
 
     <p id="supply">
@@ -238,10 +240,6 @@ a {
       ></div>
 
     </div>
-
-    <p>
-      Max Per Wallet: 5
-    </p>
 
     <p id="owned">
       Your NFTs: 0
@@ -295,7 +293,7 @@ const CONTRACT_ADDRESS =
 
 const ABI = [
 
-  "function mint(address to, string memory uri) public",
+  "function mint(string memory uri) public",
 
   "function nextTokenId() view returns (uint256)",
 
@@ -565,19 +563,7 @@ async function mintNFT() {
     return;
   }
 
-  await switchToArcNetwork();
-
-  const mintButton =
-    document.getElementById(
-      'mint'
-    );
-
   try {
-
-    mintButton.disabled = true;
-
-    mintButton.innerText =
-      'Minting...';
 
     const contract =
       new ethers.Contract(
@@ -589,21 +575,16 @@ async function mintNFT() {
         signer
       );
 
-    const address =
-      await signer.getAddress();
-
     const tx =
       await contract.mint(
-
-        address,
-
         METADATA_URI
       );
 
     await tx.wait();
 
-    mintButton.innerText =
-      'Mint Success';
+    alert(
+      'Mint Success'
+    );
 
     window.open(
 
@@ -624,11 +605,6 @@ async function mintNFT() {
       err.message
     );
   }
-
-  mintButton.disabled = false;
-
-  mintButton.innerText =
-    'Mint NFT';
 }
 
 document
