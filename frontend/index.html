@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>
+    E A R N Genesis
+  </title>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.1/dist/ethers.umd.min.js"></script>
+
+  <style>
+
+    body {
+
+      background: #0d0d0d;
+
+      color: white;
+
+      font-family: Arial;
+
+      text-align: center;
+
+      padding-top: 60px;
+    }
+
+    img {
+
+      width: 280px;
+
+      border-radius: 20px;
+
+      margin-bottom: 20px;
+    }
+
+    h1 {
+
+      font-size: 42px;
+
+      margin-bottom: 10px;
+    }
+
+    h3 {
+
+      margin-top: 25px;
+
+      color: white;
+    }
+
+    p {
+
+      color: #aaa;
+    }
+
+    .card {
+
+      background: #171717;
+
+      width: 360px;
+
+      margin: auto;
+
+      padding: 30px;
+
+      border-radius: 24px;
+    }
+
+    button {
+
+      width: 100%;
+
+      padding: 16px;
+
+      margin-top: 16px;
+
+      border: none;
+
+      border-radius: 14px;
+
+      font-size: 18px;
+
+      cursor: pointer;
+
+      background: white;
+
+      color: black;
+
+      font-weight: bold;
+
+      transition: 0.2s;
+    }
+
+    button:disabled {
+
+      opacity: 0.6;
+
+      cursor: not-allowed;
+    }
+
+    .stats {
+
+      margin-top: 20px;
+
+      text-align: left;
+    }
+
+    .stats p {
+
+      color: white;
+
+      margin: 8px 0;
+    }
+
+    .progress-container {
+
+      width: 100%;
+
+      height: 14px;
+
+      background: #2a2a2a;
+
+      border-radius: 30px;
+
+      overflow: hidden;
+
+      margin-top: 10px;
+    }
+
+    .progress-bar {
+
+      width: 0%;
+
+      height: 100%;
+
+      background: limegreen;
+
+      transition: 0.4s;
+    }
+
+    a {
+
+      text-decoration: none;
+    }
+
+    #networkStatus {
+
+      font-weight: bold;
+
+      margin-top: 10px;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="card">
+
+    <img
+      src="https://i.imgur.com/Eu4epbQ.jpeg"
+    />
+
+    <h1>
+      E A R N Genesis
+    </h1>
+
+    <p>
+      ARC Testnet NFT Collection
+    </p>
+
+    <div class="stats">
+
+      <p id="price">
+        Price: FREE
+      </p>
+
+      <p id="supply">
+        Supply: Loading...
+      </p>
+
+      <div class="progress-container">
+
+        <div
+          id="progressBar"
+          class="progress-bar"
+        ></div>
+
+      </div>
+
+      <p id="wallet">
+        Max Per Wallet: 5
+      </p>
+
+      <p id="owned">
+        Your NFTs: 0
+      </p>
+
+    </div>
+
+    <div
+      id="preview"
+      style="display:none;"
+    >
+
+      <h3>
+        NFT Preview
+      </h3>
+
+      <img
+        id="previewImage"
+        src="https://i.imgur.com/Eu4epbQ.jpeg"
+        style="
+          width:100%;
+          border-radius:18px;
+          margin-top:10px;
+        "
+      />
+
+    </div>
+
+    <button id="connect">
+      Connect Wallet
+    </button>
+
+    <p id="address">
+      Not Connected
+    </p>
+
+    <p id="networkStatus">
+      Network: Not Connected
+    </p>
+
+    <button id="mint">
+      Mint NFT
+    </button>
+
+    <br /><br />
+
+    <a
+      href="https://testnet.arcscan.app/address/0xA75ABf9725426F34b560E80B73Fa5403da3C967A"
+      target="_blank"
+    >
+
+      <button>
+        View Contract
+      </button>
+
+    </a>
+
+    <a
+      href="https://testnet.arcscan.app"
+      target="_blank"
+    >
+
+      <button>
+        ARC Explorer
+      </button>
+
+    </a>
+
+    <div class="stats">
+
+      <h3>
+        Collection Info
+      </h3>
+
+      <p>
+        Network: ARC Testnet
+      </p>
+
+      <p>
+        Standard: ERC721
+      </p>
+
+      <p>
+        Metadata: IPFS
+      </p>
+
+      <p>
+        Status: Live Mint
+      </p>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    const CONTRACT_ADDRESS =
+      '0xA75ABf9725426F34b560E80B73Fa5403da3C967A';
+
+    const ABI = [
+
+      "function mint(address to, string memory uri) public",
+
+      "function nextTokenId() view returns (uint256)",
+
+      "function balanceOf(address owner) view returns (uint256)"
+    ];
+
+    const METADATA_URI =
+      'https://gateway.pinata.cloud/ipfs/bafkreihgpyagb57cucqtgg6zfoakb4tfgbk7q7hnxggv4zafzk26gbe73e';
+
+    const MAX_SUPPLY = 100;
+
+    let signer;
+
+    async function loadSupply() {
+
+      try {
+
+        const provider =
+          new ethers.BrowserProvider(
+            window.ethereum
+          );
+
+        const contract =
+          new ethers.Contract(
+
+            CONTRACT_ADDRESS,
+
+            ABI,
+
+            provider
+          );
+
+        const total =
+          await contract.nextTokenId();
+
+        document
+          .getElementById(
+            'supply'
+          )
+          .innerText =
+
+          `Supply: ${total}/${MAX_SUPPLY}`;
+
+        const percentage =
+
+          (Number(total) / MAX_SUPPLY) * 100;
+
+        document
+          .getElementById(
+            'progressBar'
+          )
+          .style.width =
+
+          `${percentage}%`;
+
+      } catch(err) {
+
+        console.log(err);
+      }
+    }
+
+    async function loadOwnedNFTs() {
+
+      if (!signer) return;
+
+      try {
+
+        const provider =
+          new ethers.BrowserProvider(
+            window.ethereum
+          );
+
+        const contract =
+          new ethers.Contract(
+
+            CONTRACT_ADDRESS,
+
+            ABI,
+
+            provider
+          );
+
+        const address =
+          await signer.getAddress();
+
+        const balance =
+          await contract.balanceOf(
+            address
+          );
+
+        document
+          .getElementById(
+            'owned'
+          )
+          .innerText =
+
+          `Your NFTs: ${balance}`;
+
+      } catch(err) {
+
+        console.log(err);
+      }
+    }
+
+    async function switchToArcNetwork() {
+
+      if (!window.ethereum) return;
+
+      try {
+
+        await window.ethereum.request({
+
+          method: 'wallet_switchEthereumChain',
+
+          params: [
+
+            {
+              chainId: '0xA4B1'
+            }
+          ]
+        });
+
+      } catch (switchError) {
+
+        try {
+
+          await window.ethereum.request({
+
+            method: 'wallet_addEthereumChain',
+
+            params: [
+
+              {
+                chainId: '0xA4B1',
+
+                chainName: 'ARC Testnet',
+
+                nativeCurrency: {
+
+                  name: 'ARC',
+
+                  symbol: 'ARC',
+
+                  decimals: 18
+                },
+
+                rpcUrls: [
+
+                  'https://rpc.testnet.arc.network'
+                ],
+
+                blockExplorerUrls: [
+
+                  'https://testnet.arcscan.app'
+                ]
+              }
+            ]
+          });
+
+        } catch(addError) {
+
+          console.log(addError);
+        }
+      }
+    }
+
+    async function checkNetwork() {
+
+      if (!window.ethereum) return;
+
+      const chainId =
+        await window.ethereum.request({
+
+          method: 'eth_chainId'
+        });
+
+      if (chainId === '0xA4B1') {
+
+        document
+          .getElementById(
+            'networkStatus'
+          )
+          .innerText =
+
+          '✅ Connected to ARC Testnet';
+
+      } else {
+
+        document
+          .getElementById(
+            'networkStatus'
+          )
+          .innerText =
+
+          '❌ Wrong Network';
+      }
+    }
+
+    async function checkWalletConnection() {
+
+      if (!window.ethereum) return;
+
+      const accounts =
+        await window.ethereum.request({
+
+          method: 'eth_accounts'
+        });
+
+      if (accounts.length > 0) {
+
+        const provider =
+          new ethers.BrowserProvider(
+            window.ethereum
+          );
+
+        signer =
+          await provider.getSigner();
+
+        const address =
+          await signer.getAddress();
+
+        document
+          .getElementById(
+            'address'
+          )
+          .innerText =
+
+          `Connected:
+
+${address.slice(0,6)}...${address.slice(-4)}`;
+
+        await loadSupply();
+
+        await loadOwnedNFTs();
+
+        await checkNetwork();
+
+        document
+          .getElementById(
+            'preview'
+          )
+          .style.display = 'block';
+      }
+    }
+
+    async function connectWallet() {
+
+      if (!window.ethereum) {
+
+        alert(
+          'Install MetaMask'
+        );
+
+        return;
+      }
+
+      await switchToArcNetwork();
+
+      await window.ethereum.request({
+
+        method: 'eth_requestAccounts'
+      });
+
+      const provider =
+        new ethers.BrowserProvider(
+          window.ethereum
+        );
+
+      signer =
+        await provider.getSigner();
+
+      const address =
+        await signer.getAddress();
+
+      document
+        .getElementById(
+          'address'
+        )
+        .innerText =
+
+        `Connected:
+
+${address.slice(0,6)}...${address.slice(-4)}`;
+
+      alert(
+        'Wallet Connected'
+      );
+
+      await loadSupply();
+
+      await loadOwnedNFTs();
+
+      await checkNetwork();
+
+      document
+        .getElementById(
+          'preview'
+        )
+        .style.display = 'block';
+    }
+
+    async function mintNFT() {
+
+      if (!signer) {
+
+        alert(
+          'Connect wallet first'
+        );
+
+        return;
+      }
+
+      const mintButton =
+        document.getElementById(
+          'mint'
+        );
+
+      try {
+
+        mintButton.disabled = true;
+
+        mintButton.innerText =
+          'Minting...';
+
+        const contract =
+          new ethers.Contract(
+
+            CONTRACT_ADDRESS,
+
+            ABI,
+
+            signer
+          );
+
+        const address =
+          await signer.getAddress();
+
+        const tx =
+          await contract.mint(
+
+            address,
+
+            METADATA_URI
+          );
+
+        mintButton.innerText =
+          'Waiting Confirmation...';
+
+        await tx.wait();
+
+        mintButton.innerText =
+          'Mint Success';
+
+        window.open(
+
+          `https://testnet.arcscan.app/tx/${tx.hash}`,
+
+          '_blank'
+        );
+
+        await loadSupply();
+
+        await loadOwnedNFTs();
+
+        await checkNetwork();
+
+        document
+          .getElementById(
+            'preview'
+          )
+          .style.display = 'block';
+
+        setTimeout(() => {
+
+          mintButton.disabled = false;
+
+          mintButton.innerText =
+            'Mint NFT';
+
+        }, 3000);
+
+      } catch(err) {
+
+        console.log(err);
+
+        alert(
+          err.message
+        );
+
+        mintButton.disabled = false;
+
+        mintButton.innerText =
+          'Mint NFT';
+      }
+    }
+
+    document
+      .getElementById('connect')
+      .onclick =
+        connectWallet;
+
+    document
+      .getElementById('mint')
+      .onclick =
+        mintNFT;
+
+    window.ethereum.on(
+
+      'chainChanged',
+
+      async () => {
+
+        await checkNetwork();
+
+        await loadSupply();
+
+        await loadOwnedNFTs();
+      }
+    );
+
+    window.ethereum.on(
+
+      'accountsChanged',
+
+      async () => {
+
+        await checkWalletConnection();
+      }
+    );
+
+    checkWalletConnection();
+
+    loadSupply();
+
+  </script>
+
+</body>
+</html>
