@@ -4,7 +4,7 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract EarnGenesisNFT is ERC721URIStorage, Ownable {
+contract MyNFT is ERC721URIStorage, Ownable {
 
     uint256 public nextTokenId;
 
@@ -19,7 +19,10 @@ contract EarnGenesisNFT is ERC721URIStorage, Ownable {
         public minted;
 
     constructor()
-        ERC721("E A R N Genesis", "EARN")
+        ERC721(
+            "E A R N Genesis",
+            "EARN"
+        )
         Ownable(msg.sender)
     {}
 
