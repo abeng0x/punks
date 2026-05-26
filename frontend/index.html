@@ -213,7 +213,9 @@ const ABI = [
 
 "function nextTokenId() view returns(uint256)",
 
-"function balanceOf(address owner) view returns(uint256)"
+"function balanceOf(address owner) view returns(uint256)",
+
+"function minted(address owner) view returns(uint256)"
 
 ];
 
@@ -307,8 +309,6 @@ alert(
 
 return;
 }
-
-await addArcNetwork();
 
 await switchToArc();
 
@@ -427,13 +427,18 @@ await contract.balanceOf(
 address
 );
 
+const minted =
+await contract.minted(
+address
+);
+
 document
 .getElementById(
 'owned'
 )
 .innerText =
 
-`Your NFTs: ${balance}`;
+`Your NFTs: ${balance} | Minted: ${minted}/3`;
 
 }catch(err){
 
@@ -492,8 +497,9 @@ ethers.parseEther(
 
 await tx.wait();
 
-mintButton.innerText =
-'Mint Success';
+alert(
+'Mint Success'
+);
 
 window.open(
 
@@ -511,6 +517,8 @@ await loadOwned();
 console.log(err);
 
 alert(
+err.reason ||
+err.shortMessage ||
 err.message
 );
 }
