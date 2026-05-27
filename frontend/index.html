@@ -158,8 +158,22 @@
 
     .footer {
       text-align: center;
-      padding: 50px 20px;
+      padding: 50px 20px 20px;
       color: #7b7b85;
+    }
+
+    .x-link {
+      text-align: center;
+      padding-bottom: 50px;
+    }
+
+    .x-link a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
     }
 
   </style>
@@ -167,11 +181,19 @@
 <body>
 
   <div class="navbar">
-    <div class="logo">Punks</div>
 
-    <button class="connect-btn" onclick="connectWallet()">
+    <div class="logo">
+      Punks
+    </div>
+
+    <button
+      id="connectButton"
+      class="connect-btn"
+      onclick="connectWallet()"
+    >
       Connect Wallet
     </button>
+
   </div>
 
   <div class="hero">
@@ -197,7 +219,7 @@
 
       <div class="stat-box">
         <h3>Mint Price</h3>
-        <p>20 ARC</p>
+        <p>20 USDC</p>
       </div>
 
       <div class="stat-box">
@@ -285,7 +307,30 @@
   </div>
 
   <div class="footer">
-    Punks NFT • ARC Testnet
+    Built on ARC Testnet • Developed by @abeng0x
+  </div>
+
+  <div class="x-link">
+
+    <a
+      href="https://x.com/abeng0x"
+      target="_blank"
+    >
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="white"
+        viewBox="0 0 24 24"
+      >
+        <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.847h-7.406l-5.8-7.584-6.64 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932L18.9 1.153Zm-1.29 19.498h2.039L6.486 3.24H4.298l13.313 17.41Z"/>
+      </svg>
+
+      @abeng0x
+
+    </a>
+
   </div>
 
   <script>
@@ -306,11 +351,22 @@
         return;
       }
 
-      await window.ethereum.request({
-        method: "eth_requestAccounts"
-      });
+      const accounts =
+        await window.ethereum.request({
+          method: "eth_requestAccounts"
+        });
 
-      alert("Wallet connected");
+      const wallet =
+        accounts[0];
+
+      const short =
+        wallet.slice(0, 6) +
+        "..." +
+        wallet.slice(-4);
+
+      document.getElementById(
+        "connectButton"
+      ).innerText = short;
     }
 
     async function mint(id) {
