@@ -51,7 +51,7 @@ contract MyNFT is ERC721URIStorage, Ownable {
         uint256 tokenId =
             nextTokenId;
 
-        _safeMint(
+        _mint(
             msg.sender,
             tokenId
         );
