@@ -6,13 +6,20 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Punks is ERC1155, Ownable {
 
-    uint256 public constant MAX_SUPPLY = 20;
+    uint256 public constant PRICE =
+        20 ether;
+
+    uint256 public constant MAX_SUPPLY =
+        20;
 
     mapping(uint256 => uint256)
         public totalMinted;
 
     mapping(uint256 => string)
         private tokenURIs;
+
+    mapping(address => mapping(uint256 => bool))
+        public minted;
 
     constructor()
         ERC1155("")
@@ -50,9 +57,8 @@ contract Punks is ERC1155, Ownable {
     }
 
     function mint(
-        uint256 id,
-        uint256 amount
-    ) external {
+        uint256 id
+    ) external payable {
 
         require(
             id >= 1 && id <= 6,
@@ -60,18 +66,38 @@ contract Punks is ERC1155, Ownable {
         );
 
         require(
-            totalMinted[id] + amount
-                <= MAX_SUPPLY,
+            msg.value >= PRICE,
+            "Need 20 ARC"
+        );
+
+        require(
+            !minted[msg.sender][id],
+            "Already minted"
+        );
+
+        require(
+            totalMinted[id] < MAX_SUPPLY,
             "Sold out"
         );
 
-        totalMinted[id] += amount;
+        minted[msg.sender][id] = true;
+
+        totalMinted[id]++;
 
         _mint(
             msg.sender,
             id,
-            amount,
+            1,
             ""
+        );
+    }
+
+    function withdraw()
+        external
+        onlyOwner
+    {
+        payable(owner()).transfer(
+            address(this).balance
         );
     }
 }
