@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Punks NFT</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.umd.min.js"></script>
+</head>
+
+<body style="font-family:sans-serif;padding:40px;">
+
+  <h1>Punks NFT Mint</h1>
+
+  <p>
+    Contract:
+    0xae0143815c1015cae37959489c2c633e96d7eacb
+  </p>
+
+  <p>
+    Max Supply Per NFT: 20
+  </p>
+
+  <button onclick="connectWallet()">
+    Connect Wallet
+  </button>
+
+  <hr><br>
+
+  <button onclick="mint(1)">
+    Mint Kuci
+  </button>
+
+  <button onclick="mint(2)">
+    Mint Beru
+  </button>
+
+  <button onclick="mint(3)">
+    Mint Ora
+  </button>
+
+  <button onclick="mint(4)">
+    Mint Sing
+  </button>
+
+  <button onclick="mint(5)">
+    Mint Pisa
+  </button>
+
+  <button onclick="mint(6)">
+    Mint Anji
+  </button>
+
+  <script>
+
+    const CONTRACT =
+      "0xae0143815c1015cae37959489c2c633e96d7eacb";
+
+    const ABI = [
+      "function mint(uint256 id,uint256 amount) external"
+    ];
+
+    async function connectWallet() {
+
+      if (!window.ethereum) {
+
+        alert("Install wallet first");
+
+        return;
+      }
+
+      await window.ethereum.request({
+        method: "eth_requestAccounts"
+      });
+
+      alert("Wallet connected");
+    }
+
+    async function mint(id) {
+
+      try {
+
+        const provider =
+          new ethers.BrowserProvider(
+            window.ethereum
+          );
+
+        const signer =
+          await provider.getSigner();
+
+        const contract =
+          new ethers.Contract(
+            CONTRACT,
+            ABI,
+            signer
+          );
+
+        const tx =
+          await contract.mint(id, 1);
+
+        alert("Waiting transaction...");
+
+        await tx.wait();
+
+        alert(
+          `Minted Punk ${id}`
+        );
+
+      } catch (err) {
+
+        console.log(err);
+
+        alert("Mint failed");
+      }
+    }
+
+  </script>
+
+</body>
+</html>

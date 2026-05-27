@@ -23,13 +23,13 @@ async function main() {
 
   const artifact = JSON.parse(
     fs.readFileSync(
-      './out/MyERC1155.sol/MyERC1155.json',
+      './out/Punks.sol/Punks.json',
       'utf8'
     )
   );
 
   console.log(
-    '\nDeploying ERC1155...\n'
+    '\nDeploying Punks ERC1155...\n'
   );
 
   const deployResponse =
@@ -45,10 +45,10 @@ async function main() {
         'ARC-TESTNET',
 
       name:
-        'MyERC1155',
+        'Punks',
 
       description:
-        'ERC1155 Multi Token',
+        'Punks ERC1155 Collection',
 
       abiJson:
         JSON.stringify(
@@ -114,11 +114,11 @@ async function main() {
         contract.txHash;
 
       console.log(
-        '\n=== ERC1155 DEPLOYED ===\n'
+        '\n=== PUNKS DEPLOYED ===\n'
       );
 
       console.log(
-        'ERC1155 Address:\n'
+        'Punks Address:\n'
       );
 
       console.log(
