@@ -8,6 +8,11 @@
 
   <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.umd.min.js"></script>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
   <style>
 
     *{
@@ -17,28 +22,35 @@
     }
 
     body{
-      font-family:Inter,Arial,sans-serif;
-      background:
-        radial-gradient(circle at top left,#1d1d35 0%,transparent 30%),
-        radial-gradient(circle at bottom right,#111827 0%,transparent 30%),
-        #06070b;
+      font-family:'Inter',sans-serif;
+      background:#050816;
       color:white;
-      min-height:100vh;
       overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:
+        radial-gradient(circle at top left,#1e3a8a40 0%,transparent 30%),
+        radial-gradient(circle at bottom right,#06b6d440 0%,transparent 30%);
+      z-index:-2;
     }
 
     .blur{
       position:fixed;
-      width:400px;
-      height:400px;
+      width:350px;
+      height:350px;
       border-radius:999px;
       filter:blur(120px);
-      opacity:.15;
+      opacity:.18;
       z-index:-1;
+      animation:float 8s infinite ease-in-out;
     }
 
     .blur.one{
-      background:#4f46e5;
+      background:#3b82f6;
       top:-120px;
       left:-100px;
     }
@@ -47,25 +59,39 @@
       background:#06b6d4;
       bottom:-120px;
       right:-100px;
+      animation-delay:2s;
+    }
+
+    @keyframes float{
+      0%{
+        transform:translateY(0px);
+      }
+      50%{
+        transform:translateY(20px);
+      }
+      100%{
+        transform:translateY(0px);
+      }
     }
 
     .navbar{
       width:100%;
-      padding:18px 36px;
+      padding:16px 28px;
       display:flex;
       justify-content:space-between;
       align-items:center;
-      backdrop-filter:blur(12px);
-      background:rgba(10,10,15,.55);
-      border-bottom:1px solid rgba(255,255,255,.05);
       position:sticky;
       top:0;
-      z-index:100;
+      z-index:999;
+      backdrop-filter:blur(18px);
+      background:rgba(5,8,22,.72);
+      border-bottom:1px solid rgba(255,255,255,.05);
     }
 
     .logo{
       font-size:24px;
-      font-weight:800;
+      font-weight:900;
+      letter-spacing:1px;
     }
 
     .wallet-box{
@@ -75,11 +101,12 @@
 
     .connect-btn,
     .disconnect-btn{
+
       border:none;
-      cursor:pointer;
       padding:12px 18px;
       border-radius:14px;
       font-weight:700;
+      cursor:pointer;
       transition:.2s;
     }
 
@@ -88,29 +115,34 @@
       color:black;
     }
 
+    .connect-btn:hover{
+      transform:translateY(-2px);
+    }
+
     .disconnect-btn{
-      background:#18181f;
+      display:none;
+      background:#131a2e;
       color:white;
       border:1px solid rgba(255,255,255,.08);
-      display:none;
     }
 
     .hero{
-      max-width:1200px;
+      max-width:1250px;
       margin:auto;
-      padding:40px 20px 20px;
+      padding:26px 20px 8px;
     }
 
     .badge{
       display:inline-flex;
       align-items:center;
       gap:10px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.08);
       padding:10px 16px;
       border-radius:999px;
-      margin-bottom:24px;
-      color:#d4d4d8;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.06);
+      margin-bottom:20px;
+      color:#d1d5db;
+      animation:fadeUp .8s ease;
     }
 
     .dot{
@@ -118,137 +150,192 @@
       height:8px;
       border-radius:999px;
       background:#22c55e;
+      box-shadow:0 0 10px #22c55e;
     }
 
     h1{
-      font-size:56px;
+      font-size:44px;
       line-height:1;
-      margin-bottom:18px;
       font-weight:900;
+      margin-bottom:16px;
+      animation:fadeUp .8s ease;
     }
 
     .gradient{
       background:linear-gradient(
         90deg,
         #ffffff,
-        #7dd3fc
+        #60a5fa,
+        #22d3ee
       );
       -webkit-background-clip:text;
       -webkit-text-fill-color:transparent;
     }
 
     .hero p{
-      color:#a1a1aa;
-      line-height:1.7;
-      margin-bottom:10px;
-      max-width:720px;
+      color:#9ca3af;
+      line-height:1.6;
+      margin-bottom:8px;
+      max-width:700px;
+      animation:fadeUp .9s ease;
     }
 
     .stats{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-      gap:18px;
-      margin-top:30px;
-      margin-bottom:35px;
+      grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+      gap:14px;
+      margin-top:20px;
+      margin-bottom:22px;
     }
 
     .stat-box{
       background:rgba(255,255,255,.04);
       border:1px solid rgba(255,255,255,.06);
-      border-radius:24px;
-      padding:20px;
+      border-radius:22px;
+      padding:18px;
+      backdrop-filter:blur(14px);
+      transition:.25s;
+      animation:fadeUp 1s ease;
+    }
+
+    .stat-box:hover{
+      transform:translateY(-4px);
+      border-color:#3b82f6;
     }
 
     .stat-box h3{
-      color:#8b8b95;
-      font-size:14px;
-      margin-bottom:10px;
+      color:#9ca3af;
+      font-size:13px;
+      margin-bottom:8px;
     }
 
     .stat-box p{
-      color:white;
-      font-size:28px;
+      font-size:24px;
       font-weight:800;
+      color:white;
     }
 
     .grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-      gap:24px;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:18px;
     }
 
     .card{
       background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.07);
-      border-radius:28px;
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:26px;
       overflow:hidden;
-      transition:.25s;
+      backdrop-filter:blur(14px);
+      transition:.28s;
+      position:relative;
+      animation:fadeUp 1s ease;
     }
 
     .card:hover{
-      transform:translateY(-8px);
+      transform:translateY(-8px) scale(1.01);
+      border-color:#60a5fa;
+      box-shadow:0 15px 40px rgba(59,130,246,.18);
     }
 
     .card img{
       width:100%;
-      height:240px;
+      height:170px;
       object-fit:cover;
     }
 
     .card-content{
-      padding:20px;
+      padding:14px;
     }
 
     .top-row{
       display:flex;
       justify-content:space-between;
       align-items:center;
-      margin-bottom:10px;
+      margin-bottom:8px;
     }
 
     .top-row h2{
-      font-size:24px;
+      font-size:22px;
+      font-weight:800;
     }
 
     .supply{
       font-size:12px;
-      color:#a1a1aa;
+      color:#9ca3af;
+    }
+
+    .price{
+      color:#60a5fa;
+      font-weight:700;
+      margin-bottom:10px;
+      font-size:14px;
     }
 
     .mint-btn{
       width:100%;
       border:none;
-      padding:14px;
       border-radius:14px;
-      background:white;
-      color:black;
+      padding:13px;
       font-weight:800;
       cursor:pointer;
-      margin-top:15px;
+      background:white;
+      color:black;
+      transition:.2s;
+      font-size:14px;
+    }
+
+    .mint-btn:hover{
+      transform:translateY(-2px);
+    }
+
+    .mint-btn:disabled{
+      opacity:.6;
+      cursor:not-allowed;
     }
 
     .footer{
       text-align:center;
-      padding:40px 20px 14px;
+      padding:18px 20px 6px;
       color:#71717a;
-      font-size:14px;
+      font-size:13px;
     }
 
     .x-link{
       text-align:center;
-      padding-bottom:30px;
+      padding-bottom:18px;
     }
 
     .x-link a{
       color:white;
       text-decoration:none;
       font-size:18px;
+      transition:.2s;
+    }
+
+    .x-link a:hover{
+      color:#60a5fa;
+    }
+
+    @keyframes fadeUp{
+      from{
+        opacity:0;
+        transform:translateY(20px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
     }
 
     @media(max-width:768px){
 
       h1{
-        font-size:40px;
+        font-size:34px;
+      }
+
+      .navbar{
+        padding:14px 16px;
       }
 
     }
@@ -293,7 +380,7 @@
 
     <div class="badge">
       <div class="dot"></div>
-      Live on ARC Testnet
+      LIVE ON ARC TESTNET
     </div>
 
     <h1>
@@ -304,7 +391,7 @@
     </h1>
 
     <p>
-      Limited ERC1155 NFT collection built on ARC Testnet.
+      A limited ERC1155 NFT collection built on ARC Testnet.
     </p>
 
     <p>
@@ -314,22 +401,22 @@
     <div class="stats">
 
       <div class="stat-box">
-        <h3>Total NFTs</h3>
+        <h3>TOTAL NFTs</h3>
         <p>6</p>
       </div>
 
       <div class="stat-box">
-        <h3>Mint Price</h3>
-        <p>20 USDC</p>
-      </div>
-
-      <div class="stat-box">
-        <h3>Supply</h3>
+        <h3>MINT PRICE</h3>
         <p>20</p>
       </div>
 
       <div class="stat-box">
-        <h3>Wallet Limit</h3>
+        <h3>SUPPLY</h3>
+        <p>20</p>
+      </div>
+
+      <div class="stat-box">
+        <h3>WALLET LIMIT</h3>
         <p>1</p>
       </div>
 
@@ -342,9 +429,10 @@
         <div class="card-content">
           <div class="top-row">
             <h2>KUCI</h2>
-            <div class="supply">20 Supply</div>
+            <div class="supply">20 SUPPLY</div>
           </div>
-          <button class="mint-btn" onclick="mint(1)">
+          <div class="price">20 USDC</div>
+          <button class="mint-btn" onclick="mint(1,this)">
             Mint Now
           </button>
         </div>
@@ -355,9 +443,10 @@
         <div class="card-content">
           <div class="top-row">
             <h2>BERU</h2>
-            <div class="supply">20 Supply</div>
+            <div class="supply">20 SUPPLY</div>
           </div>
-          <button class="mint-btn" onclick="mint(2)">
+          <div class="price">20 USDC</div>
+          <button class="mint-btn" onclick="mint(2,this)">
             Mint Now
           </button>
         </div>
@@ -368,9 +457,10 @@
         <div class="card-content">
           <div class="top-row">
             <h2>ORA</h2>
-            <div class="supply">20 Supply</div>
+            <div class="supply">20 SUPPLY</div>
           </div>
-          <button class="mint-btn" onclick="mint(3)">
+          <div class="price">20 USDC</div>
+          <button class="mint-btn" onclick="mint(3,this)">
             Mint Now
           </button>
         </div>
@@ -381,9 +471,10 @@
         <div class="card-content">
           <div class="top-row">
             <h2>SING</h2>
-            <div class="supply">20 Supply</div>
+            <div class="supply">20 SUPPLY</div>
           </div>
-          <button class="mint-btn" onclick="mint(4)">
+          <div class="price">20 USDC</div>
+          <button class="mint-btn" onclick="mint(4,this)">
             Mint Now
           </button>
         </div>
@@ -394,9 +485,10 @@
         <div class="card-content">
           <div class="top-row">
             <h2>PISA</h2>
-            <div class="supply">20 Supply</div>
+            <div class="supply">20 SUPPLY</div>
           </div>
-          <button class="mint-btn" onclick="mint(5)">
+          <div class="price">20 USDC</div>
+          <button class="mint-btn" onclick="mint(5,this)">
             Mint Now
           </button>
         </div>
@@ -407,9 +499,10 @@
         <div class="card-content">
           <div class="top-row">
             <h2>ANJI</h2>
-            <div class="supply">20 Supply</div>
+            <div class="supply">20 SUPPLY</div>
           </div>
-          <button class="mint-btn" onclick="mint(6)">
+          <div class="price">20 USDC</div>
+          <button class="mint-btn" onclick="mint(6,this)">
             Mint Now
           </button>
         </div>
@@ -424,10 +517,7 @@
   </div>
 
   <div class="x-link">
-    <a
-      href="https://x.com/abeng0x"
-      target="_blank"
-    >
+    <a href="https://x.com/abeng0x" target="_blank">
       𝕏 @abeng0x
     </a>
   </div>
@@ -444,6 +534,15 @@
     async function connectWallet(){
 
       try{
+
+        if(!window.ethereum){
+
+          alert(
+            "Please install MetaMask or OKX Wallet"
+          );
+
+          return;
+        }
 
         const accounts =
           await window.ethereum.request({
@@ -469,6 +568,10 @@
       }catch(err){
 
         console.log(err);
+
+        alert(
+          "Wallet connection failed"
+        );
       }
     }
 
@@ -476,16 +579,32 @@
 
       document.getElementById(
         "connectButton"
-      ).innerText = "Connect Wallet";
+      ).innerText =
+        "Connect Wallet";
 
       document.getElementById(
         "disconnectButton"
-      ).style.display = "none";
+      ).style.display =
+        "none";
     }
 
-    async function mint(id){
+    async function mint(id,button){
 
       try{
+
+        if(!window.ethereum){
+
+          alert(
+            "Wallet not detected"
+          );
+
+          return;
+        }
+
+        button.innerText =
+          "Minting...";
+
+        button.disabled = true;
 
         const provider =
           new ethers.BrowserProvider(
@@ -517,13 +636,21 @@
 
         await tx.wait();
 
+        button.innerText =
+          "Minted";
+
         alert(
-          "Mint success"
+          "Mint successful"
         );
 
       }catch(err){
 
         console.log(err);
+
+        button.innerText =
+          "Mint Now";
+
+        button.disabled = false;
 
         alert(
           "Mint failed"
