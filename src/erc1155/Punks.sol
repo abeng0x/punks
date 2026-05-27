@@ -6,59 +6,23 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Punks is ERC1155, Ownable {
 
-    uint256 public constant PRICE =
-        20 ether;
+    uint256 public constant PRICE = 20 ether;
 
-    uint256 public constant MAX_SUPPLY =
-        20;
+    uint256 public constant MAX_SUPPLY = 20;
 
-    mapping(uint256 => uint256)
-        public totalMinted;
-
-    mapping(uint256 => string)
-        private tokenURIs;
+    mapping(uint256 => uint256) public totalMinted;
 
     mapping(address => mapping(uint256 => bool))
-        public minted;
+        public hasMinted;
 
     constructor()
-        ERC1155("")
+        ERC1155(
+            "ipfs://bafybeihvb4f2okfjjplabk2d7leuiivjpa7pc4o4y7vqkynnr6c2bif3oq/{id}.json"
+        )
         Ownable(msg.sender)
-    {
+    {}
 
-        tokenURIs[1] =
-            "ipfs://bafybeicfi5qhcsfs2xpz4xzufpbijnvnuounyqi5une2wefqpv6esxnpoq/kuci.json";
-
-        tokenURIs[2] =
-            "ipfs://bafybeicfi5qhcsfs2xpz4xzufpbijnvnuounyqi5une2wefqpv6esxnpoq/beru.json";
-
-        tokenURIs[3] =
-            "ipfs://bafybeicfi5qhcsfs2xpz4xzufpbijnvnuounyqi5une2wefqpv6esxnpoq/ora.json";
-
-        tokenURIs[4] =
-            "ipfs://bafybeicfi5qhcsfs2xpz4xzufpbijnvnuounyqi5une2wefqpv6esxnpoq/sing.json";
-
-        tokenURIs[5] =
-            "ipfs://bafybeicfi5qhcsfs2xpz4xzufpbijnvnuounyqi5une2wefqpv6esxnpoq/pisa.json";
-
-        tokenURIs[6] =
-            "ipfs://bafybeicfi5qhcsfs2xpz4xzufpbijnvnuounyqi5une2wefqpv6esxnpoq/anji.json";
-    }
-
-    function uri(
-        uint256 id
-    )
-        public
-        view
-        override
-        returns (string memory)
-    {
-        return tokenURIs[id];
-    }
-
-    function mint(
-        uint256 id
-    ) external payable {
+    function mint(uint256 id) external payable {
 
         require(
             id >= 1 && id <= 6,
@@ -66,13 +30,8 @@ contract Punks is ERC1155, Ownable {
         );
 
         require(
-            msg.value >= PRICE,
-            "Need 20 ARC"
-        );
-
-        require(
-            !minted[msg.sender][id],
-            "Already minted"
+            msg.value == PRICE,
+            "Wrong price"
         );
 
         require(
@@ -80,7 +39,12 @@ contract Punks is ERC1155, Ownable {
             "Sold out"
         );
 
-        minted[msg.sender][id] = true;
+        require(
+            !hasMinted[msg.sender][id],
+            "Already minted"
+        );
+
+        hasMinted[msg.sender][id] = true;
 
         totalMinted[id]++;
 
@@ -92,10 +56,8 @@ contract Punks is ERC1155, Ownable {
         );
     }
 
-    function withdraw()
-        external
-        onlyOwner
-    {
+    function withdraw() external onlyOwner {
+
         payable(owner()).transfer(
             address(this).balance
         );
