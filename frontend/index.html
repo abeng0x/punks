@@ -427,37 +427,21 @@ BUILD ON ARC TESTNET
 
 <script>
 
-const CONTRACT =
-"0x286fa0922e3dda55c361933fac736f987244f7dd";
-
-const ABI = [
-  "function mint(uint256 id) payable"
-];
-
-let provider;
-let signer;
-
 async function connectWallet(){
 
   try{
 
     if(!window.ethereum){
-      alert("MetaMask not detected");
+      alert("Install MetaMask");
       return;
     }
 
-    provider =
-      new ethers.providers.Web3Provider(window.ethereum);
+    const accounts =
+      await window.ethereum.request({
+        method: "eth_requestAccounts"
+      });
 
-    await provider.send(
-      "eth_requestAccounts",
-      []
-    );
-
-    signer = provider.getSigner();
-
-    const address =
-      await signer.getAddress();
+    const address = accounts[0];
 
     document.getElementById(
       "connectBtn"
@@ -466,13 +450,10 @@ async function connectWallet(){
       "..." +
       address.slice(-4);
 
-    console.log("Connected:", address);
-
   }catch(err){
 
     console.log(err);
-
-    alert(err.message);
+    alert("Wallet connection failed");
 
   }
 
@@ -480,42 +461,9 @@ async function connectWallet(){
 
 async function mint(id){
 
-  try{
-
-    if(!signer){
-      alert("Connect wallet first");
-      return;
-    }
-
-    const contract =
-      new ethers.Contract(
-        CONTRACT,
-        ABI,
-        signer
-      );
-
-    const tx =
-      await contract.mint(
-        id,
-        {
-          value:
-          ethers.utils.parseEther("20")
-        }
-      );
-
-    alert("Mint submitted");
-
-    await tx.wait();
-
-    alert("Mint success");
-
-  }catch(err){
-
-    console.log(err);
-
-    alert(err.message);
-
-  }
+  alert(
+    "Mint function temporarily disabled"
+  );
 
 }
 
