@@ -6,55 +6,48 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Punks is ERC1155, Ownable {
 
-    mapping(uint256 => string) private tokenURIs;
-
-    uint256 public constant KUCI = 1;
-    uint256 public constant BERU = 2;
-    uint256 public constant ANJI = 3;
-    uint256 public constant ORA  = 4;
-    uint256 public constant PISA = 5;
-    uint256 public constant SING = 6;
-
-    // harga mint 20 USDC native testnet faucet
     uint256 public mintPrice = 20 ether;
 
-    constructor() ERC1155("") Ownable(msg.sender) {
+    constructor()
+        ERC1155(
+            "https://gateway.pinata.cloud/ipfs/bafybeieut6gw5n4f3dcmucith5iol3jsh5gb7edhmftzn6xr7iqogubb4i/{id}.json"
+        )
+        Ownable(msg.sender)
+    {}
 
-        // update CID ini dengan folder metadata terbaru
-        tokenURIs[1] =
-        "https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/1.json";
+    function mint(
+        uint256 id
+    )
+        external
+        payable
+    {
 
-        tokenURIs[2] =
-        "https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/2.json";
+        require(
+            id >= 1 && id <= 6,
+            "Invalid ID"
+        );
 
-        tokenURIs[3] =
-        "https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/3.json";
+        require(
+            msg.value >= mintPrice,
+            "Not enough payment"
+        );
 
-        tokenURIs[4] =
-        "https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/4.json";
-
-        tokenURIs[5] =
-        "https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/5.json";
-
-        tokenURIs[6] =
-        "https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/6.json";
+        _mint(
+            msg.sender,
+            id,
+            1,
+            ""
+        );
 
     }
 
-    function uri(uint256 tokenId) public view override returns (string memory) {
-        return tokenURIs[tokenId];
-    }
-
-    function mint(uint256 id) external payable {
-
-        require(id >= 1 && id <= 6, "Invalid ID");
-        require(msg.value >= mintPrice, "Not enough USDC (native)");
-
-        _mint(msg.sender, id, 1, "");
-    }
-
-    function withdraw() external onlyOwner {
-        payable(owner()).transfer(address(this).balance);
+    function withdraw()
+        external
+        onlyOwner
+    {
+        payable(owner()).transfer(
+            address(this).balance
+        );
     }
 
 }
