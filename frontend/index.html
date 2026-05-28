@@ -1,148 +1,608 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
+
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
 <title>PUNKS ARC</title>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:#050505;color:white;font-family:'Inter',sans-serif;overflow-x:hidden;}
-body::before{content:"";position:fixed;inset:0;background:radial-gradient(circle at top left,#ff008033,transparent 30%),radial-gradient(circle at bottom right,#00ffe533,transparent 30%);z-index:-1;}
-header{width:100%;padding:24px 50px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;backdrop-filter:blur(14px);background:#00000099;border-bottom:1px solid #ffffff10;z-index:100;}
-.logo{font-size:32px;font-weight:900;letter-spacing:2px;}
-.wallet-btn{border:none;padding:14px 22px;border-radius:14px;background:#00ffe5;color:black;font-weight:800;cursor:pointer;}
-.hero{text-align:center;padding:90px 20px 50px;}
-.hero h1{font-size:72px;font-weight:900;line-height:1;}
-.hero p{margin-top:20px;color:#999;max-width:760px;margin-left:auto;margin-right:auto;line-height:1.6;}
-.x-link{display:inline-block;margin-top:20px;padding:12px 20px;border-radius:999px;background:#ffffff10;border:1px solid #ffffff15;color:#00ffe5;text-decoration:none;font-weight:700;}
-.grid{max-width:1800px;margin:auto;padding:30px;display:grid;grid-template-columns:repeat(6,1fr);gap:18px;}
-.card{background:#101010;border:1px solid #1f1f1f;border-radius:22px;overflow:hidden;transition:.3s;}
-.card:hover{transform:translateY(-8px);border-color:#00ffe5;box-shadow:0 0 30px #00ffe522;}
-.card img{width:100%;height:240px;object-fit:cover;}
-.card-body{padding:16px;}
-.name{font-size:18px;font-weight:800;}
-.meta{margin-top:14px;display:flex;gap:8px;}
-.meta-box{flex:1;background:#0b0b0b;border:1px solid #1f1f1f;border-radius:12px;padding:12px;}
-.meta-box span{display:block;font-size:11px;color:#777;margin-bottom:4px;}
-.meta-box strong{font-size:15px;}
-.actions{margin-top:14px;display:flex;gap:8px;}
-.mint-btn{flex:1;border:none;background:#00ffe5;color:black;padding:12px;border-radius:12px;font-weight:800;cursor:pointer;}
-.sold-btn{flex:1;border:none;background:#2a2a2a;color:#777;padding:12px;border-radius:12px;font-weight:800;cursor:not-allowed;}
-.explorer-btn{flex:1;border:none;background:#1a1a1a;color:white;padding:12px;border-radius:12px;font-weight:700;cursor:pointer;}
-footer{margin-top:40px;border-top:1px solid #1a1a1a;text-align:center;padding:40px;color:#666;}
-/* Popup */
-.popup{position:fixed;top:30px;right:30px;background:#101010;border:1px solid #00ffe5;padding:18px 22px;border-radius:18px;color:white;font-weight:700;z-index:9999;min-width:260px;box-shadow:0 0 30px #00ffe533;animation:popupIn .35s ease;}
-.popup.success{border-color:#00ff88;box-shadow:0 0 30px #00ff8844;}
-.popup.error{border-color:#ff004c;box-shadow:0 0 30px #ff004c44;}
-.popup-title{font-size:16px;margin-bottom:6px;}
-.popup-msg{font-size:14px;color:#aaa;}
-@keyframes popupIn{from{opacity:0;transform:translateY(-20px) scale(.95);}to{opacity:1;transform:translateY(0) scale(1);}}
-@keyframes popupOut{from{opacity:1;transform:translateY(0);}to{opacity:0;transform:translateY(-20px);}}
-@media(max-width:1400px){.grid{grid-template-columns:repeat(3,1fr);}}
-@media(max-width:768px){.hero h1{font-size:42px;}.grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:520px){.grid{grid-template-columns:1fr;}}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#050505;
+    color:white;
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+    radial-gradient(circle at top left,#ff008033,transparent 30%),
+    radial-gradient(circle at bottom right,#00ffe533,transparent 30%);
+    z-index:-1;
+}
+
+header{
+    width:100%;
+    padding:24px 50px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    backdrop-filter:blur(14px);
+    background:#00000099;
+    border-bottom:1px solid #ffffff10;
+    z-index:100;
+}
+
+.logo{
+    font-size:32px;
+    font-weight:900;
+    letter-spacing:2px;
+}
+
+.wallet-btn{
+    border:none;
+    padding:14px 22px;
+    border-radius:14px;
+    background:#00ffe5;
+    color:black;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.hero{
+    text-align:center;
+    padding:90px 20px 50px;
+}
+
+.hero h1{
+    font-size:72px;
+    font-weight:900;
+    line-height:1;
+}
+
+.hero p{
+    margin-top:20px;
+    color:#999;
+    max-width:760px;
+    margin-left:auto;
+    margin-right:auto;
+    line-height:1.6;
+}
+
+.x-link{
+    display:inline-block;
+    margin-top:20px;
+    padding:12px 20px;
+    border-radius:999px;
+    background:#ffffff10;
+    border:1px solid #ffffff15;
+    color:#00ffe5;
+    text-decoration:none;
+    font-weight:700;
+}
+
+.grid{
+    max-width:1800px;
+    margin:auto;
+    padding:30px;
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:18px;
+}
+
+.card{
+    background:#101010;
+    border:1px solid #1f1f1f;
+    border-radius:22px;
+    overflow:hidden;
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+    border-color:#00ffe5;
+    box-shadow:0 0 30px #00ffe522;
+}
+
+.card img{
+    width:100%;
+    height:240px;
+    object-fit:cover;
+}
+
+.card-body{
+    padding:16px;
+}
+
+.name{
+    font-size:18px;
+    font-weight:800;
+}
+
+.meta{
+    margin-top:14px;
+    display:flex;
+    gap:8px;
+}
+
+.meta-box{
+    flex:1;
+    background:#0b0b0b;
+    border:1px solid #1f1f1f;
+    border-radius:12px;
+    padding:12px;
+}
+
+.meta-box span{
+    display:block;
+    font-size:11px;
+    color:#777;
+    margin-bottom:4px;
+}
+
+.meta-box strong{
+    font-size:15px;
+}
+
+.actions{
+    margin-top:14px;
+    display:flex;
+    gap:8px;
+}
+
+.mint-btn{
+    flex:1;
+    border:none;
+    background:#00ffe5;
+    color:black;
+    padding:12px;
+    border-radius:12px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.sold-btn{
+    flex:1;
+    border:none;
+    background:#2a2a2a;
+    color:#777;
+    padding:12px;
+    border-radius:12px;
+    font-weight:800;
+    cursor:not-allowed;
+}
+
+.explorer-btn{
+    flex:1;
+    border:none;
+    background:#1a1a1a;
+    color:white;
+    padding:12px;
+    border-radius:12px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+footer{
+    margin-top:40px;
+    border-top:1px solid #1a1a1a;
+    text-align:center;
+    padding:40px;
+    color:#666;
+}
+
+@media(max-width:1400px){
+
+    .grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+}
+
+@media(max-width:768px){
+
+    .hero h1{
+        font-size:42px;
+    }
+
+    .grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:520px){
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
 </style>
 </head>
+
 <body>
 
 <header>
-<div class="logo">PUNKS ARC</div>
-<button id="walletBtn" class="wallet-btn" onclick="connectWallet()">CONNECT WALLET</button>
+
+<div class="logo">
+PUNKS ARC
+</div>
+
+<button
+id="walletBtn"
+class="wallet-btn"
+onclick="connectWallet()"
+>
+CONNECT WALLET
+</button>
+
 </header>
 
 <section class="hero">
-<h1>THE UNDERGROUND PUNKS COLLECTION</h1>
-<p>6 exclusive cyber punks built on ARC Testnet. Limited ERC-1155 collection with max supply 99 per NFT.</p>
-<a href="https://x.com/Abeng0x" target="_blank" class="x-link">@abeng0x</a>
+
+<h1>
+THE UNDERGROUND
+PUNKS COLLECTION
+</h1>
+
+<p>
+6 exclusive cyber punks built on ARC Testnet.
+Limited ERC-1155 collection with max supply 99 per NFT.
+</p>
+
+<a
+href="https://x.com/Abeng0x"
+target="_blank"
+class="x-link"
+>
+@abeng0x
+</a>
+
 </section>
 
-<section class="grid" id="nftGrid"></section>
+<section
+class="grid"
+id="nftGrid"
+>
+</section>
 
-<footer>Developed by Abeng • PUNKS ARC • ARC TESTNET</footer>
+<footer>
+Developed by Abeng • PUNKS ARC • ARC TESTNET
+</footer>
 
 <script>
-const CONTRACT = "0xead1Ef7272F1127CC849EBeC0c5C3EFcf960eAce";
-const ABI = ["function mint(uint256 id) payable"];
-const NFTS = [
-{id:1,name:"KUCI",image:"https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/kuci.jpg",price:"20 USDC",supply:99,minted:0},
-{id:2,name:"BERU",image:"https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/beru.jpg",price:"20 USDC",supply:99,minted:0},
-{id:3,name:"ANJI",image:"https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/anji.jpg",price:"20 USDC",supply:99,minted:0},
-{id:4,name:"ORA",image:"https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/ora.jpg",price:"20 USDC",supply:99,minted:0},
-{id:5,name:"PISA",image:"https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/pisa.jpg",price:"20 USDC",supply:99,minted:0},
-{id:6,name:"SING",image:"https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/sing.jpg",price:"20 USDC",supply:99,minted:0}
+
+const CONTRACT =
+"0xead1Ef7272F1127CC849EBeC0c5C3EFcf960eAce";
+
+const ABI = [
+"function mint(uint256 id) payable"
 ];
 
-let provider, signer, connected=false;
+const NFTS = [
 
-function showPopup(type,title,msg){
-  const popup = document.createElement("div");
-  popup.className = `popup ${type}`;
-  popup.innerHTML = `<div class="popup-title">${title}</div><div class="popup-msg">${msg}</div>`;
-  document.body.appendChild(popup);
-  setTimeout(()=>{
-    popup.style.animation="popupOut .3s ease forwards";
-    setTimeout(()=>{popup.remove();},300);
-  },3000);
+{
+id:1,
+name:"KUCI",
+image:"https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/kuci.jpg",
+price:"20 USDC",
+supply:99,
+minted:0
+},
+
+{
+id:2,
+name:"BERU",
+image:"https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/beru.jpg",
+price:"20 USDC",
+supply:99,
+minted:0
+},
+
+{
+id:3,
+name:"ANJI",
+image:"https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/anji.jpg",
+price:"20 USDC",
+supply:99,
+minted:0
+},
+
+{
+id:4,
+name:"ORA",
+image:"https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/ora.jpg",
+price:"20 USDC",
+supply:99,
+minted:0
+},
+
+{
+id:5,
+name:"PISA",
+image:"https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/pisa.jpg",
+price:"20 USDC",
+supply:99,
+minted:0
+},
+
+{
+id:6,
+name:"SING",
+image:"https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/sing.jpg",
+price:"20 USDC",
+supply:99,
+minted:0
 }
 
+];
+
+let provider;
+let signer;
+let connected = false;
+
 function renderNFTs(){
-  const grid = document.getElementById("nftGrid");
-  grid.innerHTML="";
-  NFTS.forEach(nft=>{
-    const soldOut = nft.minted>=nft.supply;
-    const card = document.createElement("div");
-    card.className="card";
-    card.innerHTML=`
-      <img src="${nft.image}" />
-      <div class="card-body">
-        <div class="name">${nft.name} #${nft.id}</div>
-        <div class="meta">
-          <div class="meta-box"><span>PRICE</span><strong>${nft.price}</strong></div>
-          <div class="meta-box"><span>SUPPLY</span><strong>${nft.minted} / ${nft.supply}</strong></div>
-        </div>
-        <div class="actions">
-          ${soldOut?`<button class="sold-btn" disabled>SOLD OUT</button>`:`<button class="mint-btn" onclick="mintNFT(${nft.id})">MINT</button>`}
-          <button class="explorer-btn" onclick="openExplorer()">EXPLORER</button>
-        </div>
-      </div>
-    `;
-    grid.appendChild(card);
-  });
+
+const grid =
+document.getElementById(
+"nftGrid"
+);
+
+grid.innerHTML = "";
+
+NFTS.forEach(nft=>{
+
+const soldOut =
+nft.minted >= nft.supply;
+
+const card =
+document.createElement("div");
+
+card.className = "card";
+
+card.innerHTML = `
+
+<img src="${nft.image}" />
+
+<div class="card-body">
+
+<div class="name">
+${nft.name} #${nft.id}
+</div>
+
+<div class="meta">
+
+<div class="meta-box">
+<span>PRICE</span>
+<strong>${nft.price}</strong>
+</div>
+
+<div class="meta-box">
+<span>SUPPLY</span>
+<strong>
+${nft.minted} / ${nft.supply}
+</strong>
+</div>
+
+</div>
+
+<div class="actions">
+
+${
+soldOut
+?
+
+`
+<button
+class="sold-btn"
+disabled
+>
+SOLD OUT
+</button>
+`
+
+:
+
+`
+<button
+class="mint-btn"
+onclick="mintNFT(${nft.id})"
+>
+MINT
+</button>
+`
+}
+
+<button
+class="explorer-btn"
+onclick="openExplorer()"
+>
+EXPLORER
+</button>
+
+</div>
+
+</div>
+
+`;
+
+grid.appendChild(card);
+
+});
+
 }
 
 async function connectWallet(){
-  if(connected){connected=false; signer=null; document.getElementById("walletBtn").innerText="CONNECT WALLET"; return;}
-  if(!window.ethereum){alert("Install MetaMask"); return;}
-  provider=new ethers.providers.Web3Provider(window.ethereum);
-  await provider.send("eth_requestAccounts",[]);
-  signer=provider.getSigner();
-  const addr=await signer.getAddress();
-  connected=true;
-  document.getElementById("walletBtn").innerText=addr.slice(0,6)+"..."+addr.slice(-4);
+
+if(connected){
+
+connected = false;
+
+signer = null;
+
+document
+.getElementById(
+"walletBtn"
+)
+.innerText =
+"CONNECT WALLET";
+
+return;
+
+}
+
+if(!window.ethereum){
+
+alert(
+"Install MetaMask"
+);
+
+return;
+
+}
+
+provider =
+new ethers.providers.Web3Provider(
+window.ethereum
+);
+
+await provider.send(
+"eth_requestAccounts",
+[]
+);
+
+signer =
+provider.getSigner();
+
+const addr =
+await signer.getAddress();
+
+connected = true;
+
+document
+.getElementById(
+"walletBtn"
+)
+.innerText =
+addr.slice(0,6)
++
+"..."
++
+addr.slice(-4);
+
 }
 
 async function mintNFT(id){
-  if(!signer){alert("Connect wallet first"); return;}
-  const nft=NFTS.find(x=>x.id===id);
-  if(nft.minted>=nft.supply){showPopup("error","Sold Out","NFT already sold out"); return;}
-  try{
-    const contract=new ethers.Contract(CONTRACT,ABI,signer);
-    const tx=await contract.mint(id,{value:ethers.utils.parseEther("20")});
-    showPopup("success","Mint Submitted","Transaction sent to ARC network");
-    await tx.wait();
-    nft.minted++;
-    renderNFTs();
-    showPopup("success","Mint Success",`${nft.name} minted successfully`);
-  }catch(err){console.log(err);showPopup("error","Mint Failed",err.message);}
+
+if(!signer){
+
+alert(
+"Connect wallet first"
+);
+
+return;
+
+}
+
+try{
+
+const nft =
+NFTS.find(
+x => x.id === id
+);
+
+if(
+nft.minted >= nft.supply
+){
+
+alert("Sold out");
+
+return;
+
+}
+
+const contract =
+new ethers.Contract(
+CONTRACT,
+ABI,
+signer
+);
+
+const tx =
+await contract.mint(
+id,
+{
+value:
+ethers.utils.parseEther(
+"20"
+)
+}
+);
+
+alert(
+"Mint submitted"
+);
+
+await tx.wait();
+
+nft.minted++;
+
+renderNFTs();
+
+alert(
+"Mint success"
+);
+
+}catch(err){
+
+console.log(err);
+
+alert(
+"Mint failed"
+);
+
+}
+
 }
 
 function openExplorer(){
-  window.open("https://testnet.arcscan.app/address/"+CONTRACT,"_blank");
+
+window.open(
+"https://testnet.arcscan.app/address/"
++ CONTRACT,
+"_blank"
+);
+
 }
 
-window.onload = ()=>{renderNFTs();};
+window.onload = ()=>{
+
+renderNFTs();
+
+};
+
 </script>
+
 </body>
 </html>
+```
