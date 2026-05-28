@@ -6,7 +6,6 @@
 <title>PUNKS ARC</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
-
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:#050505;color:white;font-family:'Inter',sans-serif;overflow-x:hidden;}
@@ -41,25 +40,6 @@ footer{margin-top:40px;border-top:1px solid #1a1a1a;text-align:center;padding:40
 .popup-msg{font-size:14px;color:#aaa;}
 @keyframes popupIn{from{opacity:0;transform:translateY(-20px) scale(.95);}to{opacity:1;transform:translateY(0) scale(1);}}
 @keyframes popupOut{from{opacity:1;transform:translateY(0);}to{opacity:0;transform:translateY(-20px);}}
-/* Detail Modal */
-.detail-modal{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;}
-.detail-overlay{position:absolute;inset:0;background:#000000cc;backdrop-filter:blur(8px);}
-.detail-content{position:relative;width:95%;max-width:1200px;background:#101010;border:1px solid #1f1f1f;border-radius:28px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;z-index:2;animation:detailIn .3s ease;}
-.detail-left{background:#0b0b0b;}
-.detail-image{width:100%;height:100%;object-fit:cover;min-height:650px;}
-.detail-right{padding:40px;}
-.collection-name{color:#00ffe5;font-weight:700;margin-bottom:12px;}
-#detailName{font-size:48px;font-weight:900;line-height:1;}
-.creator-link{display:inline-block;margin-top:14px;color:#aaa;text-decoration:none;}
-.detail-box{margin-top:30px;background:#0b0b0b;border:1px solid #1f1f1f;border-radius:20px;padding:24px;}
-.detail-row{display:flex;justify-content:space-between;margin-bottom:18px;}
-.detail-row:last-child{margin-bottom:0;}
-.detail-row span{color:#777;}
-.detail-description{margin-top:28px;color:#aaa;line-height:1.7;}
-.detail-actions{margin-top:30px;display:flex;gap:12px;}
-.close-detail{position:absolute;top:20px;right:20px;width:42px;height:42px;border:none;border-radius:50%;background:#1a1a1a;color:white;font-size:18px;cursor:pointer;z-index:5;}
-@keyframes detailIn{from{opacity:0;transform:scale(.95);}to{opacity:1;transform:scale(1);}}
-@media(max-width:900px){.detail-content{grid-template-columns:1fr;overflow-y:auto;max-height:95vh;}.detail-image{min-height:400px;}#detailName{font-size:34px;}}
 @media(max-width:1400px){.grid{grid-template-columns:repeat(3,1fr);}}
 @media(max-width:768px){.hero h1{font-size:42px;}.grid{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:520px){.grid{grid-template-columns:1fr;}}
@@ -80,38 +60,12 @@ footer{margin-top:40px;border-top:1px solid #1a1a1a;text-align:center;padding:40
 
 <section class="grid" id="nftGrid"></section>
 
-<!-- Detail Modal -->
-<div id="detailModal" class="detail-modal">
-<div class="detail-overlay" onclick="closeDetail()"></div>
-<div class="detail-content">
-<button class="close-detail" onclick="closeDetail()">✕</button>
-<div class="detail-left">
-<img id="detailImage" src="" class="detail-image"/>
-</div>
-<div class="detail-right">
-<div class="collection-name">PUNKS ARC</div>
-<h2 id="detailName">NFT NAME</h2>
-<a href="https://x.com/Abeng0x" target="_blank" class="creator-link">by @abeng0x</a>
-<div class="detail-box">
-<div class="detail-row"><span>PRICE</span><strong id="detailPrice">20 USDC</strong></div>
-<div class="detail-row"><span>SUPPLY</span><strong id="detailSupply">0 / 99</strong></div>
-<div class="detail-row"><span>BLOCKCHAIN</span><strong>ARC TESTNET</strong></div>
-</div>
-<p class="detail-description">Underground cyber punks collection built on ARC Testnet. Limited ERC-1155 NFT collection with fixed mint price.</p>
-<div class="detail-actions">
-<button id="detailMintBtn" class="mint-btn">MINT NOW</button>
-<button class="explorer-btn" onclick="openExplorer()">EXPLORER</button>
-</div>
-</div>
-</div>
-</div>
-
 <footer>Developed by Abeng • PUNKS ARC • ARC TESTNET</footer>
 
 <script>
-const CONTRACT="0xead1Ef7272F1127CC849EBeC0c5C3EFcf960eAce";
-const ABI=["function mint(uint256 id) payable","function totalSupply(uint256 id) view returns (uint256)"];
-const NFTS=[
+const CONTRACT = "0xead1Ef7272F1127CC849EBeC0c5C3EFcf960eAce";
+const ABI = ["function mint(uint256 id) payable"];
+const NFTS = [
 {id:1,name:"KUCI",image:"https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/kuci.jpg",price:"20 USDC",supply:99,minted:0},
 {id:2,name:"BERU",image:"https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/beru.jpg",price:"20 USDC",supply:99,minted:0},
 {id:3,name:"ANJI",image:"https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/anji.jpg",price:"20 USDC",supply:99,minted:0},
@@ -122,96 +76,73 @@ const NFTS=[
 
 let provider, signer, connected=false;
 
-async function loadSupply(){
-if(!window.ethereum) return;
-try{
-provider=new ethers.providers.Web3Provider(window.ethereum);
-const contract=new ethers.Contract(CONTRACT,ABI,provider);
-for(const nft of NFTS){
-try{const supply=await contract.totalSupply(nft.id); nft.minted=parseInt(supply.toString());}catch(err){console.log("Supply error",err);}
-}
-renderNFTs();
-}catch(err){console.log(err);}
+function showPopup(type,title,msg){
+  const popup = document.createElement("div");
+  popup.className = `popup ${type}`;
+  popup.innerHTML = `<div class="popup-title">${title}</div><div class="popup-msg">${msg}</div>`;
+  document.body.appendChild(popup);
+  setTimeout(()=>{
+    popup.style.animation="popupOut .3s ease forwards";
+    setTimeout(()=>{popup.remove();},300);
+  },3000);
 }
 
 function renderNFTs(){
-const grid=document.getElementById("nftGrid");
-grid.innerHTML="";
-NFTS.forEach(nft=>{
-const soldOut=nft.minted>=nft.supply;
-const card=document.createElement("div");
-card.className="card";
-card.innerHTML=`
-<img src="${nft.image}" />
-<div class="card-body">
-<div class="name" onclick="openDetail(${nft.id})" style="cursor:pointer;">${nft.name} #${nft.id}</div>
-<div class="meta">
-<div class="meta-box"><span>PRICE</span><strong>${nft.price}</strong></div>
-<div class="meta-box"><span>SUPPLY</span><strong>${nft.minted} / ${nft.supply}</strong></div>
-</div>
-<div class="actions">
-${soldOut?`<button class="sold-btn" disabled>SOLD OUT</button>`:`<button class="mint-btn" onclick="mintNFT(${nft.id})">MINT</button>`}
-<button class="explorer-btn" onclick="openExplorer()">EXPLORER</button>
-</div>
-</div>
-`;
-grid.appendChild(card);
-});
-}
-
-function showPopup(type,title,msg){
-const popup=document.createElement("div");
-popup.className=`popup ${type}`;
-popup.innerHTML=`<div class="popup-title">${title}</div><div class="popup-msg">${msg}</div>`;
-document.body.appendChild(popup);
-setTimeout(()=>{
-popup.style.animation="popupOut .3s ease forwards";
-setTimeout(()=>{popup.remove();},300);
-},3000);
+  const grid = document.getElementById("nftGrid");
+  grid.innerHTML="";
+  NFTS.forEach(nft=>{
+    const soldOut = nft.minted>=nft.supply;
+    const card = document.createElement("div");
+    card.className="card";
+    card.innerHTML=`
+      <img src="${nft.image}" />
+      <div class="card-body">
+        <div class="name">${nft.name} #${nft.id}</div>
+        <div class="meta">
+          <div class="meta-box"><span>PRICE</span><strong>${nft.price}</strong></div>
+          <div class="meta-box"><span>SUPPLY</span><strong>${nft.minted} / ${nft.supply}</strong></div>
+        </div>
+        <div class="actions">
+          ${soldOut?`<button class="sold-btn" disabled>SOLD OUT</button>`:`<button class="mint-btn" onclick="mintNFT(${nft.id})">MINT</button>`}
+          <button class="explorer-btn" onclick="openExplorer()">EXPLORER</button>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
 }
 
 async function connectWallet(){
-if(connected){connected=false;signer=null;document.getElementById("walletBtn").innerText="CONNECT WALLET";return;}
-if(!window.ethereum){alert("Install MetaMask"); return;}
-provider=new ethers.providers.Web3Provider(window.ethereum);
-await provider.send("eth_requestAccounts",[]);
-signer=provider.getSigner();
-const addr=await signer.getAddress();
-connected=true;
-document.getElementById("walletBtn").innerText=addr.slice(0,6)+"..."+addr.slice(-4);
-await loadSupply();
+  if(connected){connected=false; signer=null; document.getElementById("walletBtn").innerText="CONNECT WALLET"; return;}
+  if(!window.ethereum){alert("Install MetaMask"); return;}
+  provider=new ethers.providers.Web3Provider(window.ethereum);
+  await provider.send("eth_requestAccounts",[]);
+  signer=provider.getSigner();
+  const addr=await signer.getAddress();
+  connected=true;
+  document.getElementById("walletBtn").innerText=addr.slice(0,6)+"..."+addr.slice(-4);
 }
 
 async function mintNFT(id){
-if(!signer){alert("Connect wallet first"); return;}
-const nft=NFTS.find(x=>x.id===id);
-if(nft.minted>=nft.supply){showPopup("error","Sold Out","NFT already sold out"); return;}
-try{
-const contract=new ethers.Contract(CONTRACT,ABI,signer);
-const tx=await contract.mint(id,{value:ethers.utils.parseEther("20")});
-showPopup("success","Mint Submitted","Transaction sent to ARC network");
-await tx.wait();
-await loadSupply();
-showPopup("success","Mint Success",`${nft.name} minted successfully`);
-}catch(err){console.log(err);showPopup("error","Mint Failed",err.message);}
+  if(!signer){alert("Connect wallet first"); return;}
+  const nft=NFTS.find(x=>x.id===id);
+  if(nft.minted>=nft.supply){showPopup("error","Sold Out","NFT already sold out"); return;}
+  try{
+    const contract=new ethers.Contract(CONTRACT,ABI,signer);
+    const tx=await contract.mint(id,{value:ethers.utils.parseEther("20")});
+    showPopup("success","Mint Submitted","Transaction sent to ARC network");
+    await tx.wait();
+    nft.minted++;
+    renderNFTs();
+    showPopup("success","Mint Success",`${nft.name} minted successfully`);
+  }catch(err){console.log(err);showPopup("error","Mint Failed",err.message);}
 }
 
-function openExplorer(){window.open("https://testnet.arcscan.app/address/"+CONTRACT,"_blank");}
-
-function openDetail(id){
-const nft=NFTS.find(x=>x.id===id);
-document.getElementById("detailImage").src=nft.image;
-document.getElementById("detailName").innerText=`${nft.name} #${nft.id}`;
-document.getElementById("detailPrice").innerText=nft.price;
-document.getElementById("detailSupply").innerText=`${nft.minted} / ${nft.supply}`;
-const mintBtn=document.getElementById("detailMintBtn");
-if(nft.minted>=nft.supply){mintBtn.innerText="SOLD OUT";mintBtn.disabled=true;mintBtn.className="sold-btn";}
-else{mintBtn.innerText="MINT NOW";mintBtn.disabled=false;mintBtn.className="mint-btn";mintBtn.onclick=()=>mintNFT(nft.id);}
-document.getElementById("detailModal").style.display="flex";
+function openExplorer(){
+  window.open("https://testnet.arcscan.app/address/"+CONTRACT,"_blank");
 }
-function closeDetail(){document.getElementById("detailModal").style.display="none";}
 
-window.onload=async()=>{await loadSupply();};
+window.onload = ()=>{renderNFTs();};
 </script>
 </body>
 </html>
