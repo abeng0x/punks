@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>Punks NFT on ARC Testnet</title>
+<title>Punks NFT</title>
 
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
 
@@ -40,7 +40,7 @@ header{
   justify-content:space-between;
   align-items:center;
   border-bottom:1px solid rgba(255,255,255,0.08);
-  background:rgba(0,0,0,0.65);
+  background:rgba(0,0,0,0.7);
   backdrop-filter:blur(10px);
   position:sticky;
   top:0;
@@ -55,7 +55,7 @@ header{
 
 .logo span{
   opacity:.6;
-  font-size:13px;
+  font-size:12px;
 }
 
 .wallet-btn{
@@ -66,6 +66,11 @@ header{
   color:black;
   font-weight:800;
   cursor:pointer;
+  transition:.2s;
+}
+
+.wallet-btn:hover{
+  transform:translateY(-2px);
 }
 
 .hero{
@@ -144,6 +149,11 @@ header{
   font-weight:900;
   cursor:pointer;
   margin-bottom:10px;
+  transition:.2s;
+}
+
+.mint-btn:hover{
+  transform:translateY(-2px);
 }
 
 .explorer-btn{
@@ -220,7 +230,7 @@ id="connectBtn"
 class="wallet-btn"
 onclick="connectWallet()"
 >
-CONNECT
+CONNECT WALLET
 </button>
 
 </header>
@@ -230,27 +240,29 @@ CONNECT
 <h1>Punks NFT</h1>
 
 <p>
-Mint exclusive Punks NFT collection on ARC Testnet.
-20 USDC per mint. Max 1 mint per wallet.
-Built by @abeng0x.
+Mint exclusive Punks NFT collection built on ARC Testnet.
 </p>
 
 </section>
 
 <section class="grid">
 
-<!-- 1 -->
 <div class="card">
 <img src="./img/kuci.jpg" class="nft-img">
+
 <div class="content">
+
 <div class="nft-name">KUCI</div>
+
 <div class="meta">
-<span>20 USDC</span>
+<span>20 ARC</span>
 <span>MAX 20</span>
 </div>
+
 <button onclick="mint(1)" class="mint-btn">
 MINT
 </button>
+
 <a
 href="https://testnet.arcscan.app/address/0x286fa0922e3dda55c361933fac736f987244f7dd"
 target="_blank"
@@ -258,21 +270,26 @@ class="explorer-btn"
 >
 EXPLORER
 </a>
+
 </div>
 </div>
 
-<!-- 2 -->
 <div class="card">
 <img src="./img/beru.jpg" class="nft-img">
+
 <div class="content">
+
 <div class="nft-name">BERU</div>
+
 <div class="meta">
-<span>20 USDC</span>
+<span>20 ARC</span>
 <span>MAX 20</span>
 </div>
+
 <button onclick="mint(2)" class="mint-btn">
 MINT
 </button>
+
 <a
 href="https://testnet.arcscan.app/address/0x286fa0922e3dda55c361933fac736f987244f7dd"
 target="_blank"
@@ -280,21 +297,26 @@ class="explorer-btn"
 >
 EXPLORER
 </a>
+
 </div>
 </div>
 
-<!-- 3 -->
 <div class="card">
-<img src="./img/biru.jpg" class="nft-img">
+<img src="./img/anji.jpg" class="nft-img">
+
 <div class="content">
-<div class="nft-name">BIRU</div>
+
+<div class="nft-name">ANJI</div>
+
 <div class="meta">
-<span>20 USDC</span>
+<span>20 ARC</span>
 <span>MAX 20</span>
 </div>
+
 <button onclick="mint(3)" class="mint-btn">
 MINT
 </button>
+
 <a
 href="https://testnet.arcscan.app/address/0x286fa0922e3dda55c361933fac736f987244f7dd"
 target="_blank"
@@ -302,21 +324,26 @@ class="explorer-btn"
 >
 EXPLORER
 </a>
+
 </div>
 </div>
 
-<!-- 4 -->
 <div class="card">
-<img src="./img/merah.jpg" class="nft-img">
+<img src="./img/ora.jpg" class="nft-img">
+
 <div class="content">
-<div class="nft-name">MERAH</div>
+
+<div class="nft-name">ORA</div>
+
 <div class="meta">
-<span>20 USDC</span>
+<span>20 ARC</span>
 <span>MAX 20</span>
 </div>
+
 <button onclick="mint(4)" class="mint-btn">
 MINT
 </button>
+
 <a
 href="https://testnet.arcscan.app/address/0x286fa0922e3dda55c361933fac736f987244f7dd"
 target="_blank"
@@ -324,21 +351,26 @@ class="explorer-btn"
 >
 EXPLORER
 </a>
+
 </div>
 </div>
 
-<!-- 5 -->
 <div class="card">
-<img src="./img/hijau.jpg" class="nft-img">
+<img src="./img/pisa.jpg" class="nft-img">
+
 <div class="content">
-<div class="nft-name">HIJAU</div>
+
+<div class="nft-name">PISA</div>
+
 <div class="meta">
-<span>20 USDC</span>
+<span>20 ARC</span>
 <span>MAX 20</span>
 </div>
+
 <button onclick="mint(5)" class="mint-btn">
 MINT
 </button>
+
 <a
 href="https://testnet.arcscan.app/address/0x286fa0922e3dda55c361933fac736f987244f7dd"
 target="_blank"
@@ -346,21 +378,26 @@ class="explorer-btn"
 >
 EXPLORER
 </a>
+
 </div>
 </div>
 
-<!-- 6 -->
 <div class="card">
-<img src="./img/ungu.jpg" class="nft-img">
+<img src="./img/sing.jpg" class="nft-img">
+
 <div class="content">
-<div class="nft-name">UNGU</div>
+
+<div class="nft-name">SING</div>
+
 <div class="meta">
-<span>20 USDC</span>
+<span>20 ARC</span>
 <span>MAX 20</span>
 </div>
+
 <button onclick="mint(6)" class="mint-btn">
 MINT
 </button>
+
 <a
 href="https://testnet.arcscan.app/address/0x286fa0922e3dda55c361933fac736f987244f7dd"
 target="_blank"
@@ -368,6 +405,7 @@ class="explorer-btn"
 >
 EXPLORER
 </a>
+
 </div>
 </div>
 
@@ -400,42 +438,52 @@ let signer;
 
 async function connectWallet(){
 
-  if(!window.ethereum){
-    alert("Install MetaMask");
-    return;
+  try{
+
+    if(typeof window.ethereum === "undefined"){
+      alert("Please install MetaMask");
+      return;
+    }
+
+    await window.ethereum.request({
+      method:"eth_requestAccounts"
+    });
+
+    const provider =
+    new ethers.providers.Web3Provider(
+      window.ethereum
+    );
+
+    signer = provider.getSigner();
+
+    const address =
+    await signer.getAddress();
+
+    document.getElementById(
+      "connectBtn"
+    ).innerText =
+    address.slice(0,6) +
+    "..." +
+    address.slice(-4);
+
+  }catch(err){
+
+    console.log(err);
+
+    alert("Wallet connection failed");
+
   }
-
-  await window.ethereum.request({
-    method:"eth_requestAccounts"
-  });
-
-  const provider =
-  new ethers.providers.Web3Provider(
-    window.ethereum
-  );
-
-  signer = provider.getSigner();
-
-  const address =
-  await signer.getAddress();
-
-  document.getElementById(
-    "connectBtn"
-  ).innerText =
-  address.slice(0,6) +
-  "..." +
-  address.slice(-4);
 
 }
 
 async function mint(id){
 
-  if(!signer){
-    alert("Connect wallet first");
-    return;
-  }
-
   try{
+
+    if(!signer){
+      alert("Connect wallet first");
+      return;
+    }
 
     const contract =
     new ethers.Contract(
