@@ -1,474 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8" />
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-<title>Punks NFT</title>
-
+<title>PUNKS ARC</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
 
 <style>
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
-body{
-  font-family:Arial, Helvetica, sans-serif;
-  background:#050505;
-  color:white;
-  overflow-x:hidden;
-}
-
-header{
-  width:100%;
-  padding:18px 30px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-bottom:1px solid rgba(255,255,255,0.08);
-  background:rgba(0,0,0,0.7);
-  position:sticky;
-  top:0;
-  z-index:999;
-}
-
-.logo{
-  font-size:24px;
-  font-weight:900;
-}
-
-.wallet-btn{
-  padding:12px 18px;
-  border:none;
-  border-radius:12px;
-  background:white;
-  color:black;
-  font-weight:800;
-  cursor:pointer;
-}
-
-.hero{
-  text-align:center;
-  padding:40px 20px;
-}
-
-.hero h1{
-  font-size:42px;
-  margin-bottom:10px;
-}
-
-.hero p{
-  opacity:.7;
-}
-
-.grid{
-  width:100%;
-  max-width:1600px;
-  margin:auto;
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  gap:16px;
-  padding:20px;
-}
-
-.card{
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.08);
-  border-radius:18px;
-  overflow:hidden;
-}
-
-.nft-img{
-  width:100%;
-  height:170px;
-  object-fit:cover;
-}
-
-.content{
-  padding:14px;
-}
-
-.nft-name{
-  font-size:18px;
-  font-weight:900;
-  margin-bottom:10px;
-}
-
-.meta{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:12px;
-  opacity:.7;
-  font-size:12px;
-}
-
-.mint-btn{
-  width:100%;
-  padding:10px;
-  border:none;
-  border-radius:10px;
-  background:white;
-  color:black;
-  font-weight:900;
-  cursor:pointer;
-  margin-bottom:10px;
-}
-
-.explorer-btn{
-  width:100%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:10px;
-  border-radius:10px;
-  text-decoration:none;
-  font-size:12px;
-  font-weight:800;
-  color:white;
-  background:rgba(255,255,255,0.08);
-}
-
-footer{
-  text-align:center;
-  padding:25px;
-  opacity:.5;
-}
-
-@media(max-width:1400px){
-
-  .grid{
-    grid-template-columns:repeat(3,1fr);
-  }
-
-}
-
-@media(max-width:800px){
-
-  .grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-}
-
-@media(max-width:550px){
-
-  .grid{
-    grid-template-columns:1fr;
-  }
-
-}
-
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:#050505;color:white;overflow-x:hidden;}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(circle at top left,#ff008033,transparent 30%),radial-gradient(circle at bottom right,#00ffe533,transparent 30%);z-index:-1;}
+header{width:100%;padding:24px 60px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;backdrop-filter:blur(14px);background:#00000099;border-bottom:1px solid #ffffff10;z-index:100;}
+.logo{font-size:32px;font-weight:900;letter-spacing:2px;}
+.nav-right{display:flex;gap:14px;}
+.wallet-btn{border:none;padding:14px 22px;border-radius:16px;font-weight:700;cursor:pointer;transition:.2s;}
+.connect{background:#00ffe5;color:black;}
+.disconnect{background:#ff004c;color:white;}
+.wallet-btn:hover{transform:translateY(-2px);}
+.hero{padding:120px 60px 80px;max-width:1400px;margin:auto;text-align:center;}
+.badge{display:inline-block;background:#ffffff10;border:1px solid #ffffff15;padding:10px 18px;border-radius:999px;margin-bottom:16px;font-size:14px;}
+.hero h1{font-size:64px;line-height:1;font-weight:900;}
+.hero p{margin-top:24px;color:#bdbdbd;max-width:700px;margin-left:auto;margin-right:auto;font-size:20px;line-height:1.5;}
+.x-tag{margin-top:16px;display:inline-block;padding:10px 18px;border-radius:999px;background:#ffffff10;border:1px solid #ffffff15;font-weight:700;color:#00ffe5;}
+.section{max-width:1400px;margin:auto;padding:20px 60px 100px;}
+.section-title{font-size:44px;font-weight:900;margin-bottom:40px;text-align:center;}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:18px;}
+.card{background:#101010;border:1px solid #1f1f1f;border-radius:20px;overflow:hidden;transition:.3s;position:relative;}
+.card:hover{transform:translateY(-8px);border-color:#00ffe5;box-shadow:0 0 30px #00ffe522;}
+.card img{width:100%;height:240px;object-fit:cover;}
+.card-body{padding:16px;}
+.top-row{display:flex;justify-content:space-between;align-items:center;}
+.name{font-size:16px;font-weight:800;}
+.meta{margin-top:12px;display:flex;justify-content:space-between;}
+.meta-box{background:#0b0b0b;border:1px solid #1f1f1f;border-radius:12px;padding:12px;flex:1;}
+.meta-box + .meta-box{margin-left:8px;}
+.meta-box span{display:block;color:#888;font-size:12px;margin-bottom:4px;}
+.meta-box strong{font-size:16px;}
+.actions{margin-top:12px;display:flex;gap:8px;}
+.mint-btn{flex:1;border:none;background:#00ffe5;color:black;padding:12px;border-radius:12px;font-weight:800;cursor:pointer;font-size:14px;}
+.explorer-btn{flex:1;border:none;background:#1a1a1a;color:white;padding:12px;border-radius:12px;font-weight:700;cursor:pointer;font-size:14px;}
+footer{border-top:1px solid #1a1a1a;text-align:center;padding:40px;color:#666;}
+@media(max-width:1200px){.grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:768px){.grid{grid-template-columns:repeat(2,1fr);}.hero h1{font-size:44px;}}
+@media(max-width:480px){.grid{grid-template-columns:1fr;}.hero h1{font-size:36px;}}
 </style>
-
 </head>
 
 <body>
 
 <header>
-
-<div class="logo">
-PUNKS
+<div class="logo">PUNKS ARC</div>
+<div class="nav-right">
+<button id="walletBtn" class="wallet-btn connect" onclick="connectWallet()">CONNECT WALLET</button>
 </div>
-
-<button
-id="connectBtn"
-class="wallet-btn"
-onclick="connectWallet()"
->
-CONNECT WALLET
-</button>
-
 </header>
 
 <section class="hero">
-
-<h1>Punks NFT</h1>
-
-<p>
-Mint exclusive Punks NFT collection on ARC Testnet
-</p>
-
+<div class="badge">ERC-1155 • ARC TESTNET</div>
+<h1>THE UNDERGROUND PUNKS COLLECTION</h1>
+<p>6 exclusive cyber punks built on ARC Testnet. Limited ERC-1155 collection with fixed mint price and permanent onchain identity.</p>
+<div class="x-tag">@abeng0x</div>
 </section>
 
-<section class="grid">
-
-<div class="card">
-
-<img src="./img/kuci.jpg" class="nft-img">
-
-<div class="content">
-
-<div class="nft-name">KUCI</div>
-
-<div class="meta">
-<span>20 USDC</span>
-<span>ID 1</span>
+<section class="section">
+<h2 class="section-title">COLLECTION</h2>
+<div class="grid" id="nftGrid">
+<!-- NFT cards akan di-generate JS -->
 </div>
-
-<button onclick="mint(1)" class="mint-btn">
-MINT
-</button>
-
-<a
-href="https://testnet.arcscan.app/address/0xead1ef7272f1127cc849ebec0c5c3efcf960eace"
-target="_blank"
-class="explorer-btn"
->
-EXPLORER
-</a>
-
-</div>
-</div>
-
-<div class="card">
-
-<img src="./img/beru.jpg" class="nft-img">
-
-<div class="content">
-
-<div class="nft-name">BERU</div>
-
-<div class="meta">
-<span>20 USDC</span>
-<span>ID 2</span>
-</div>
-
-<button onclick="mint(2)" class="mint-btn">
-MINT
-</button>
-
-<a
-href="https://testnet.arcscan.app/address/0xead1ef7272f1127cc849ebec0c5c3efcf960eace"
-target="_blank"
-class="explorer-btn"
->
-EXPLORER
-</a>
-
-</div>
-</div>
-
-<div class="card">
-
-<img src="./img/anji.jpg" class="nft-img">
-
-<div class="content">
-
-<div class="nft-name">ANJI</div>
-
-<div class="meta">
-<span>20 USDC</span>
-<span>ID 3</span>
-</div>
-
-<button onclick="mint(3)" class="mint-btn">
-MINT
-</button>
-
-<a
-href="https://testnet.arcscan.app/address/0xead1ef7272f1127cc849ebec0c5c3efcf960eace"
-target="_blank"
-class="explorer-btn"
->
-EXPLORER
-</a>
-
-</div>
-</div>
-
-<div class="card">
-
-<img src="./img/ora.jpg" class="nft-img">
-
-<div class="content">
-
-<div class="nft-name">ORA</div>
-
-<div class="meta">
-<span>20 USDC</span>
-<span>ID 4</span>
-</div>
-
-<button onclick="mint(4)" class="mint-btn">
-MINT
-</button>
-
-<a
-href="https://testnet.arcscan.app/address/0xead1ef7272f1127cc849ebec0c5c3efcf960eace"
-target="_blank"
-class="explorer-btn"
->
-EXPLORER
-</a>
-
-</div>
-</div>
-
-<div class="card">
-
-<img src="./img/pisa.jpg" class="nft-img">
-
-<div class="content">
-
-<div class="nft-name">PISA</div>
-
-<div class="meta">
-<span>20 USDC</span>
-<span>ID 5</span>
-</div>
-
-<button onclick="mint(5)" class="mint-btn">
-MINT
-</button>
-
-<a
-href="https://testnet.arcscan.app/address/0xead1ef7272f1127cc849ebec0c5c3efcf960eace"
-target="_blank"
-class="explorer-btn"
->
-EXPLORER
-</a>
-
-</div>
-</div>
-
-<div class="card">
-
-<img src="./img/sing.jpg" class="nft-img">
-
-<div class="content">
-
-<div class="nft-name">SING</div>
-
-<div class="meta">
-<span>20 USDC</span>
-<span>ID 6</span>
-</div>
-
-<button onclick="mint(6)" class="mint-btn">
-MINT
-</button>
-
-<a
-href="https://testnet.arcscan.app/address/0xead1ef7272f1127cc849ebec0c5c3efcf960eace"
-target="_blank"
-class="explorer-btn"
->
-EXPLORER
-</a>
-
-</div>
-</div>
-
 </section>
 
-<footer>
-
-BUILD ON ARC TESTNET
-
-</footer>
+<footer>PUNKS ARC • BUILT ON ARC TESTNET</footer>
 
 <script>
-
-const CONTRACT =
-"0xe0c2feaf0c3aae6d167c5ba29e137fb163f8d8d0";
-
-const ABI = [
-  "function mint(uint256 id) payable"
+const CONTRACT = "0xead1Ef7272F1127CC849EBeC0c5C3EFcf960eAce";
+const ABI = ["function mint(uint256 id) payable"];
+const NFTS = [
+  {id:1,name:"KUCI",price:"20 USDC",image:"./img/kuci.jpg"},
+  {id:2,name:"BERU",price:"20 USDC",image:"./img/beru.jpg"},
+  {id:3,name:"ANJI",price:"20 USDC",image:"./img/anji.jpg"},
+  {id:4,name:"ORA",price:"20 USDC",image:"./img/ora.jpg"},
+  {id:5,name:"PISA",price:"20 USDC",image:"./img/pisa.jpg"},
+  {id:6,name:"SING",price:"20 USDC",image:"./img/sing.jpg"}
 ];
 
+let provider, signer, walletConnected=false;
+
+function renderNFTs(){
+  const grid=document.getElementById("nftGrid");
+  grid.innerHTML="";
+  NFTS.forEach(nft=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.innerHTML=`
+      <img src="${nft.image}" />
+      <div class="card-body">
+        <div class="top-row">
+          <div class="name">${nft.name} #${nft.id}</div>
+        </div>
+        <div class="meta">
+          <div class="meta-box"><span>PRICE</span><strong>${nft.price}</strong></div>
+          <div class="meta-box"><span>SUPPLY</span><strong>1 / 1</strong></div>
+        </div>
+        <div class="actions">
+          <button class="mint-btn" onclick="mintNFT(${nft.id})">MINT NOW</button>
+          <button class="explorer-btn" onclick="openExplorer()">EXPLORER</button>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
 async function connectWallet(){
-
-  try{
-
-    if(!window.ethereum){
-      alert("Install MetaMask");
-      return;
-    }
-
-    const accounts =
-      await window.ethereum.request({
-        method:"eth_requestAccounts"
-      });
-
-    const address = accounts[0];
-
-    document.getElementById(
-      "connectBtn"
-    ).innerText =
-      address.slice(0,6) +
-      "..." +
-      address.slice(-4);
-
-  }catch(err){
-
-    console.log(err);
-
-    alert("Wallet connection failed");
-
+  if(walletConnected){
+    walletConnected=false;
+    signer=null;
+    const btn=document.getElementById("walletBtn");
+    btn.innerText="CONNECT WALLET";
+    btn.classList.remove("disconnect");
+    btn.classList.add("connect");
+    return;
   }
-
+  if(!window.ethereum){alert("Install MetaMask"); return;}
+  provider=new ethers.providers.Web3Provider(window.ethereum);
+  await provider.send("eth_requestAccounts",[]);
+  signer=provider.getSigner();
+  const addr=await signer.getAddress();
+  walletConnected=true;
+  const btn=document.getElementById("walletBtn");
+  btn.innerText=addr.slice(0,6)+"..."+addr.slice(-4);
+  btn.classList.remove("connect");
+  btn.classList.add("disconnect");
 }
 
-async function mint(id){
-
+async function mintNFT(id){
+  if(!signer){alert("Connect wallet first");return;}
   try{
-
-    if(!window.ethereum){
-      alert("Install MetaMask");
-      return;
-    }
-
-    const provider =
-      new ethers.providers.Web3Provider(
-        window.ethereum
-      );
-
-    const signer =
-      provider.getSigner();
-
-    const contract =
-      new ethers.Contract(
-        CONTRACT,
-        ABI,
-        signer
-      );
-
-    const tx =
-      await contract.mint(
-        id,
-        {
-          value:
-          ethers.utils.parseEther("20")
-        }
-      );
-
-    alert("Mint submitted");
-
+    const contract=new ethers.Contract(CONTRACT,ABI,signer);
+    const tx=await contract.mint(id,{value:ethers.utils.parseEther("20")});
+    alert("Mint submitted, waiting confirmation...");
     await tx.wait();
-
-    alert("Mint success");
-
-  }catch(err){
-
-    console.log(err);
-
-    alert(
-      "Mint failed: " +
-      err.message
-    );
-
-  }
-
+    alert("Mint success!");
+  }catch(err){console.log(err);alert("Mint failed: "+err.message);}
 }
 
+function openExplorer(){window.open("https://testnet.arcscan.app/address/"+CONTRACT,"_blank");}
+
+window.onload=()=>{renderNFTs();}
 </script>
 
 </body>
