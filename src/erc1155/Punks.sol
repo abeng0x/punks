@@ -6,14 +6,16 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Punks is ERC1155, Ownable {
 
+    string public name = "Punks NFT";
+    string public symbol = "PUNKS";
+
     uint256 public constant PRICE = 20 ether;
 
     uint256 public constant MAX_SUPPLY = 20;
 
     mapping(uint256 => uint256) public totalMinted;
 
-    mapping(address => mapping(uint256 => bool))
-        public hasMinted;
+    mapping(address => mapping(uint256 => bool)) public minted;
 
     constructor()
         ERC1155(
@@ -24,10 +26,7 @@ contract Punks is ERC1155, Ownable {
 
     function mint(uint256 id) external payable {
 
-        require(
-            id >= 1 && id <= 6,
-            "Invalid ID"
-        );
+        require(id >= 1 && id <= 6, "Invalid ID");
 
         require(
             msg.value == PRICE,
@@ -40,20 +39,15 @@ contract Punks is ERC1155, Ownable {
         );
 
         require(
-            !hasMinted[msg.sender][id],
+            !minted[msg.sender][id],
             "Already minted"
         );
 
-        hasMinted[msg.sender][id] = true;
+        minted[msg.sender][id] = true;
 
         totalMinted[id]++;
 
-        _mint(
-            msg.sender,
-            id,
-            1,
-            ""
-        );
+        _mint(msg.sender, id, 1, "");
     }
 
     function withdraw() external onlyOwner {
@@ -62,4 +56,5 @@ contract Punks is ERC1155, Ownable {
             address(this).balance
         );
     }
+
 }
