@@ -1,5 +1,15 @@
 {
-  "name": "SING",
+  "name": "ORA",
   "description": "Punks NFT on ARC Testnet",
-  "image": "ipfs://bafybeihvb4f2okfjjplabk2d7leuiivjpa7pc4o4y7vqkynnr6c2bif3oq/sing.jpg"
+  "image": "https://gateway.pinata.cloud/ipfs/bafybeifrpej2h7gli45tjdoip2mwe4a2obuenesbmyx2psefbfv5ldngxq/ora.jpg",
+  "attributes": [
+    {
+      "trait_type": "Collection",
+      "value": "Punks"
+    },
+    {
+      "trait_type": "Character",
+      "value": "ORA"
+    }
+  ]
 }

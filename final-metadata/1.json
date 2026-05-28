@@ -1,5 +1,11 @@
 {
   "name": "KUCI",
   "description": "Punks NFT on ARC Testnet",
-  "image": "ipfs://bafybeihvb4f2okfjjplabk2d7leuiivjpa7pc4o4y7vqkynnr6c2bif3oq/kuci.jpg"
+  "image": "https://gateway.pinata.cloud/ipfs/bafybeifrpej2h7gli45tjdoip2mwe4a2obuenesbmyx2psefbfv5ldngxq/kuci.jpg",
+  "attributes": [
+    {
+      "trait_type": "Collection",
+      "value": "Punks"
+    }
+  ]
 }

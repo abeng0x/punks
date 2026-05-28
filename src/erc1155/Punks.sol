@@ -22,22 +22,22 @@ contract Punks is ERC1155, Ownable {
 
         // update CID ini dengan folder metadata terbaru
         tokenURIs[1] =
-        "https://gateway.pinata.cloud/ipfs/bafybeifrpej2h7gli45tjdoip2mwe4a2obuenesbmyx2psefbfv5ldngxq/1.json";
+        "https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/1.json";
 
         tokenURIs[2] =
-        "https://gateway.pinata.cloud/ipfs/bafybeifrpej2h7gli45tjdoip2mwe4a2obuenesbmyx2psefbfv5ldngxq/2.json";
+        "https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/2.json";
 
         tokenURIs[3] =
-        "https://gateway.pinata.cloud/ipfs/bafybeifrpej2h7gli45tjdoip2mwe4a2obuenesbmyx2psefbfv5ldngxq/3.json";
+        "https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/3.json";
 
         tokenURIs[4] =
-        "https://gateway.pinata.cloud/ipfs/bafybeifrpej2h7gli45tjdoip2mwe4a2obuenesbmyx2psefbfv5ldngxq/4.json";
+        "https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/4.json";
 
         tokenURIs[5] =
-        "https://gateway.pinata.cloud/ipfs/bafybeifrpej2h7gli45tjdoip2mwe4a2obuenesbmyx2psefbfv5ldngxq/5.json";
+        "https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/5.json";
 
         tokenURIs[6] =
-        "https://gateway.pinata.cloud/ipfs/bafybeifrpej2h7gli45tjdoip2mwe4a2obuenesbmyx2psefbfv5ldngxq/6.json";
+        "https://gateway.pinata.cloud/ipfs/bafybeibjcld2njiphgqt4abpw75jifx7erahfobtjd77cs36ikvca5irb4/6.json";
 
     }
 
