@@ -15,10 +15,12 @@ contract Punks is ERC1155, Ownable {
     uint256 public constant PISA = 5;
     uint256 public constant SING = 6;
 
+    // harga mint 20 USDC native testnet faucet
     uint256 public mintPrice = 20 ether;
 
     constructor() ERC1155("") Ownable(msg.sender) {
 
+        // update CID ini dengan folder metadata terbaru
         tokenURIs[1] =
         "https://gateway.pinata.cloud/ipfs/bafybeifrpej2h7gli45tjdoip2mwe4a2obuenesbmyx2psefbfv5ldngxq/1.json";
 
@@ -39,52 +41,20 @@ contract Punks is ERC1155, Ownable {
 
     }
 
-    function uri(
-        uint256 tokenId
-    )
-        public
-        view
-        override
-        returns (string memory)
-    {
+    function uri(uint256 tokenId) public view override returns (string memory) {
         return tokenURIs[tokenId];
     }
 
-    function mint(
-        uint256 id
-    )
-        external
-        payable
-    {
+    function mint(uint256 id) external payable {
 
-        require(
-            id >= 1 && id <= 6,
-            "Invalid ID"
-        );
+        require(id >= 1 && id <= 6, "Invalid ID");
+        require(msg.value >= mintPrice, "Not enough USDC (native)");
 
-        require(
-            msg.value >= mintPrice,
-            "Not enough ARC"
-        );
-
-        _mint(
-            msg.sender,
-            id,
-            1,
-            ""
-        );
-
+        _mint(msg.sender, id, 1, "");
     }
 
-    function withdraw()
-        external
-        onlyOwner
-    {
-
-        payable(owner()).transfer(
-            address(this).balance
-        );
-
+    function withdraw() external onlyOwner {
+        payable(owner()).transfer(address(this).balance);
     }
 
 }
