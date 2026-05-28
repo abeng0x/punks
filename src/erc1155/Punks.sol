@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract Punks is ERC1155, Ownable {
 
     string public name = "Punks NFT";
+
     string public symbol = "PUNKS";
 
     uint256 public constant PRICE = 20 ether;
@@ -17,16 +18,50 @@ contract Punks is ERC1155, Ownable {
 
     mapping(address => mapping(uint256 => bool)) public minted;
 
+    mapping(uint256 => string) private tokenURIs;
+
     constructor()
-        ERC1155(
-            "ipfs://bafybeihvb4f2okfjjplabk2d7leuiivjpa7pc4o4y7vqkynnr6c2bif3oq/{id}.json"
-        )
+        ERC1155("")
         Ownable(msg.sender)
-    {}
+    {
 
-    function mint(uint256 id) external payable {
+        tokenURIs[1] =
+        "https://gateway.pinata.cloud/ipfs/bafybeifrpej2h7gli45tjdoip2mwe4a2obuenesbmyx2psefbfv5ldngxq/1.json";
 
-        require(id >= 1 && id <= 6, "Invalid ID");
+        tokenURIs[2] =
+        "https://gateway.pinata.cloud/ipfs/bafybeifrpej2h7gli45tjdoip2mwe4a2obuenesbmyx2psefbfv5ldngxq/2.json";
+
+        tokenURIs[3] =
+        "https://gateway.pinata.cloud/ipfs/bafybeifrpej2h7gli45tjdoip2mwe4a2obuenesbmyx2psefbfv5ldngxq/3.json";
+
+        tokenURIs[4] =
+        "https://gateway.pinata.cloud/ipfs/bafybeifrpej2h7gli45tjdoip2mwe4a2obuenesbmyx2psefbfv5ldngxq/4.json";
+
+        tokenURIs[5] =
+        "https://gateway.pinata.cloud/ipfs/bafybeifrpej2h7gli45tjdoip2mwe4a2obuenesbmyx2psefbfv5ldngxq/5.json";
+
+        tokenURIs[6] =
+        "https://gateway.pinata.cloud/ipfs/bafybeifrpej2h7gli45tjdoip2mwe4a2obuenesbmyx2psefbfv5ldngxq/6.json";
+    }
+
+    function uri(uint256 id)
+        public
+        view
+        override
+        returns (string memory)
+    {
+        return tokenURIs[id];
+    }
+
+    function mint(uint256 id)
+        external
+        payable
+    {
+
+        require(
+            id >= 1 && id <= 6,
+            "Invalid ID"
+        );
 
         require(
             msg.value == PRICE,
@@ -47,10 +82,18 @@ contract Punks is ERC1155, Ownable {
 
         totalMinted[id]++;
 
-        _mint(msg.sender, id, 1, "");
+        _mint(
+            msg.sender,
+            id,
+            1,
+            ""
+        );
     }
 
-    function withdraw() external onlyOwner {
+    function withdraw()
+        external
+        onlyOwner
+    {
 
         payable(owner()).transfer(
             address(this).balance
