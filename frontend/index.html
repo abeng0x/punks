@@ -1,664 +1,760 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <title>Punks NFT on ARC Testnet</title>
+<meta charset="UTF-8" />
 
-  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.umd.min.js"></script>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+/>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<title>
+  Punks NFT on ARC Testnet
+</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.umd.min.js"></script>
 
-  <style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-    }
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    body{
-      font-family:'Inter',sans-serif;
-      background:#050816;
-      color:white;
-      overflow-x:hidden;
-    }
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+rel="stylesheet"
+/>
 
-    body::before{
-      content:"";
-      position:fixed;
-      inset:0;
-      background:
-        radial-gradient(circle at top left,#1e3a8a40 0%,transparent 30%),
-        radial-gradient(circle at bottom right,#06b6d440 0%,transparent 30%);
-      z-index:-2;
-    }
+<style>
 
-    .blur{
-      position:fixed;
-      width:350px;
-      height:350px;
-      border-radius:999px;
-      filter:blur(120px);
-      opacity:.18;
-      z-index:-1;
-      animation:float 8s infinite ease-in-out;
-    }
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
-    .blur.one{
-      background:#3b82f6;
-      top:-120px;
-      left:-100px;
-    }
+body{
+  font-family:'Inter',sans-serif;
+  background:#050816;
+  color:white;
+  overflow-x:hidden;
+}
 
-    .blur.two{
-      background:#06b6d4;
-      bottom:-120px;
-      right:-100px;
-      animation-delay:2s;
-    }
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at top left,#1e3a8a40 0%,transparent 30%),
+    radial-gradient(circle at bottom right,#06b6d440 0%,transparent 30%);
+  z-index:-2;
+}
 
-    @keyframes float{
-      0%{
-        transform:translateY(0px);
-      }
-      50%{
-        transform:translateY(20px);
-      }
-      100%{
-        transform:translateY(0px);
-      }
-    }
+.blur{
+  position:fixed;
+  width:350px;
+  height:350px;
+  border-radius:999px;
+  filter:blur(120px);
+  opacity:.18;
+  z-index:-1;
+  animation:float 8s infinite ease-in-out;
+}
 
-    .navbar{
-      width:100%;
-      padding:16px 28px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      position:sticky;
-      top:0;
-      z-index:999;
-      backdrop-filter:blur(18px);
-      background:rgba(5,8,22,.72);
-      border-bottom:1px solid rgba(255,255,255,.05);
-    }
+.blur.one{
+  background:#3b82f6;
+  top:-120px;
+  left:-100px;
+}
 
-    .logo{
-      font-size:24px;
-      font-weight:900;
-      letter-spacing:1px;
-    }
+.blur.two{
+  background:#06b6d4;
+  bottom:-120px;
+  right:-100px;
+  animation-delay:2s;
+}
 
-    .wallet-box{
-      display:flex;
-      gap:10px;
-    }
+@keyframes float{
 
-    .connect-btn,
-    .disconnect-btn{
+  0%{
+    transform:translateY(0px);
+  }
 
-      border:none;
-      padding:12px 18px;
-      border-radius:14px;
-      font-weight:700;
-      cursor:pointer;
-      transition:.2s;
-    }
+  50%{
+    transform:translateY(20px);
+  }
 
-    .connect-btn{
-      background:white;
-      color:black;
-    }
+  100%{
+    transform:translateY(0px);
+  }
 
-    .connect-btn:hover{
-      transform:translateY(-2px);
-    }
+}
 
-    .disconnect-btn{
-      display:none;
-      background:#131a2e;
-      color:white;
-      border:1px solid rgba(255,255,255,.08);
-    }
+.navbar{
+  width:100%;
+  padding:16px 28px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:999;
+  backdrop-filter:blur(18px);
+  background:rgba(5,8,22,.72);
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
 
-    .hero{
-      max-width:1250px;
-      margin:auto;
-      padding:26px 20px 8px;
-    }
+.logo{
+  font-size:24px;
+  font-weight:900;
+  letter-spacing:1px;
+}
 
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:10px 16px;
-      border-radius:999px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.06);
-      margin-bottom:20px;
-      color:#d1d5db;
-      animation:fadeUp .8s ease;
-    }
+.wallet-box{
+  display:flex;
+  gap:10px;
+}
 
-    .dot{
-      width:8px;
-      height:8px;
-      border-radius:999px;
-      background:#22c55e;
-      box-shadow:0 0 10px #22c55e;
-    }
+.connect-btn,
+.disconnect-btn{
 
-    h1{
-      font-size:44px;
-      line-height:1;
-      font-weight:900;
-      margin-bottom:16px;
-      animation:fadeUp .8s ease;
-    }
+  border:none;
+  padding:12px 18px;
+  border-radius:14px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.2s;
+}
 
-    .gradient{
-      background:linear-gradient(
-        90deg,
-        #ffffff,
-        #60a5fa,
-        #22d3ee
-      );
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-    }
+.connect-btn{
+  background:white;
+  color:black;
+}
 
-    .hero p{
-      color:#9ca3af;
-      line-height:1.6;
-      margin-bottom:8px;
-      max-width:700px;
-      animation:fadeUp .9s ease;
-    }
+.connect-btn:hover{
+  transform:translateY(-2px);
+}
 
-    .stats{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-      gap:14px;
-      margin-top:20px;
-      margin-bottom:22px;
-    }
+.disconnect-btn{
+  display:none;
+  background:#131a2e;
+  color:white;
+  border:1px solid rgba(255,255,255,.08);
+}
 
-    .stat-box{
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:22px;
-      padding:18px;
-      backdrop-filter:blur(14px);
-      transition:.25s;
-      animation:fadeUp 1s ease;
-    }
+.hero{
+  max-width:1400px;
+  margin:auto;
+  padding:20px 20px 4px;
+}
 
-    .stat-box:hover{
-      transform:translateY(-4px);
-      border-color:#3b82f6;
-    }
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 16px;
+  border-radius:999px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.06);
+  margin-bottom:18px;
+  color:#d1d5db;
+  animation:fadeUp .8s ease;
+}
 
-    .stat-box h3{
-      color:#9ca3af;
-      font-size:13px;
-      margin-bottom:8px;
-    }
+.dot{
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  background:#22c55e;
+  box-shadow:0 0 10px #22c55e;
+}
 
-    .stat-box p{
-      font-size:24px;
-      font-weight:800;
-      color:white;
-    }
+h1{
+  font-size:42px;
+  line-height:1;
+  font-weight:900;
+  margin-bottom:14px;
+  animation:fadeUp .8s ease;
+}
 
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:18px;
-    }
+.gradient{
+  background:linear-gradient(
+    90deg,
+    #ffffff,
+    #60a5fa,
+    #22d3ee
+  );
 
-    .card{
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:26px;
-      overflow:hidden;
-      backdrop-filter:blur(14px);
-      transition:.28s;
-      position:relative;
-      animation:fadeUp 1s ease;
-    }
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
 
-    .card:hover{
-      transform:translateY(-8px) scale(1.01);
-      border-color:#60a5fa;
-      box-shadow:0 15px 40px rgba(59,130,246,.18);
-    }
+.hero p{
+  color:#9ca3af;
+  line-height:1.5;
+  margin-bottom:6px;
+  max-width:700px;
+  animation:fadeUp .9s ease;
+}
 
-    .card img{
-      width:100%;
-      height:170px;
-      object-fit:cover;
-    }
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+  margin-top:18px;
+  margin-bottom:18px;
+}
 
-    .card-content{
-      padding:14px;
-    }
+.stat-box{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:22px;
+  padding:14px;
+  backdrop-filter:blur(14px);
+  transition:.25s;
+  animation:fadeUp 1s ease;
+}
 
-    .top-row{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:8px;
-    }
+.stat-box:hover{
+  transform:translateY(-4px);
+  border-color:#3b82f6;
+}
 
-    .top-row h2{
-      font-size:22px;
-      font-weight:800;
-    }
+.stat-box h3{
+  color:#9ca3af;
+  font-size:12px;
+  margin-bottom:6px;
+}
 
-    .supply{
-      font-size:12px;
-      color:#9ca3af;
-    }
+.stat-box p{
+  font-size:22px;
+  font-weight:800;
+  color:white;
+}
 
-    .price{
-      color:#60a5fa;
-      font-weight:700;
-      margin-bottom:10px;
-      font-size:14px;
-    }
+.grid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:14px;
+}
 
-    .mint-btn{
-      width:100%;
-      border:none;
-      border-radius:14px;
-      padding:13px;
-      font-weight:800;
-      cursor:pointer;
-      background:white;
-      color:black;
-      transition:.2s;
-      font-size:14px;
-    }
+.card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:24px;
+  overflow:hidden;
+  backdrop-filter:blur(14px);
+  transition:.28s;
+  position:relative;
+  animation:fadeUp 1s ease;
+}
 
-    .mint-btn:hover{
-      transform:translateY(-2px);
-    }
+.card:hover{
+  transform:translateY(-6px);
+  border-color:#60a5fa;
+  box-shadow:0 12px 28px rgba(59,130,246,.18);
+}
 
-    .mint-btn:disabled{
-      opacity:.6;
-      cursor:not-allowed;
-    }
+.card img{
+  width:100%;
+  height:120px;
+  object-fit:cover;
+}
 
-    .footer{
-      text-align:center;
-      padding:18px 20px 6px;
-      color:#71717a;
-      font-size:13px;
-    }
+.card-content{
+  padding:12px;
+}
 
-    .x-link{
-      text-align:center;
-      padding-bottom:18px;
-    }
+.top-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:6px;
+}
 
-    .x-link a{
-      color:white;
-      text-decoration:none;
-      font-size:18px;
-      transition:.2s;
-    }
+.top-row h2{
+  font-size:15px;
+  font-weight:800;
+}
 
-    .x-link a:hover{
-      color:#60a5fa;
-    }
+.supply{
+  font-size:10px;
+  color:#9ca3af;
+}
 
-    @keyframes fadeUp{
-      from{
-        opacity:0;
-        transform:translateY(20px);
-      }
-      to{
-        opacity:1;
-        transform:translateY(0);
-      }
-    }
+.price{
+  color:#60a5fa;
+  font-weight:700;
+  margin-bottom:8px;
+  font-size:12px;
+}
 
-    @media(max-width:768px){
+.mint-btn{
+  width:100%;
+  border:none;
+  border-radius:12px;
+  padding:10px;
+  font-weight:800;
+  cursor:pointer;
+  background:white;
+  color:black;
+  transition:.2s;
+  font-size:12px;
+}
 
-      h1{
-        font-size:34px;
-      }
+.mint-btn:hover{
+  transform:translateY(-2px);
+}
 
-      .navbar{
-        padding:14px 16px;
-      }
+.mint-btn:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
 
-    }
+.footer{
+  text-align:center;
+  padding:14px 20px 4px;
+  color:#71717a;
+  font-size:12px;
+}
 
-  </style>
+.x-link{
+  text-align:center;
+  padding-bottom:12px;
+}
+
+.x-link a{
+  color:white;
+  text-decoration:none;
+  font-size:16px;
+  transition:.2s;
+}
+
+.x-link a:hover{
+  color:#60a5fa;
+}
+
+@keyframes fadeUp{
+
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+}
+
+@media(max-width:1100px){
+
+  .grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+}
+
+@media(max-width:700px){
+
+  .grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+}
+
+</style>
+
 </head>
 
 <body>
 
-  <div class="blur one"></div>
-  <div class="blur two"></div>
+<div class="blur one"></div>
 
-  <div class="navbar">
+<div class="blur two"></div>
 
-    <div class="logo">
-      PUNKS
+<div class="navbar">
+
+  <div class="logo">
+    PUNKS
+  </div>
+
+  <div class="wallet-box">
+
+    <button
+      id="connectButton"
+      class="connect-btn"
+      onclick="connectWallet()"
+    >
+      Connect Wallet
+    </button>
+
+    <button
+      id="disconnectButton"
+      class="disconnect-btn"
+      onclick="disconnectWallet()"
+    >
+      Disconnect
+    </button>
+
+  </div>
+
+</div>
+
+<div class="hero">
+
+  <div class="badge">
+
+    <div class="dot"></div>
+
+    LIVE ON ARC TESTNET
+
+  </div>
+
+  <h1>
+
+    Punks NFT
+
+    <span class="gradient">
+      on ARC Testnet
+    </span>
+
+  </h1>
+
+  <p>
+    Limited ERC1155 NFT collection built on ARC Testnet.
+  </p>
+
+  <p>
+    Mint Price: 20 USDC • Max Supply: 20 Each • Limit: 1 Per Wallet
+  </p>
+
+  <div class="stats">
+
+    <div class="stat-box">
+      <h3>TOTAL NFTs</h3>
+      <p>6</p>
     </div>
 
-    <div class="wallet-box">
+    <div class="stat-box">
+      <h3>MINT PRICE</h3>
+      <p>20</p>
+    </div>
 
-      <button
-        id="connectButton"
-        class="connect-btn"
-        onclick="connectWallet()"
-      >
-        Connect Wallet
-      </button>
+    <div class="stat-box">
+      <h3>SUPPLY</h3>
+      <p>20</p>
+    </div>
 
-      <button
-        id="disconnectButton"
-        class="disconnect-btn"
-        onclick="disconnectWallet()"
-      >
-        Disconnect
-      </button>
+    <div class="stat-box">
+      <h3>WALLET LIMIT</h3>
+      <p>1</p>
+    </div>
+
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+
+      <img src="https://gateway.pinata.cloud/ipfs/bafybeihvb4f2okfjjplabk2d7leuiivjpa7pc4o4y7vqkynnr6c2bif3oq/kuci.jpg">
+
+      <div class="card-content">
+
+        <div class="top-row">
+          <h2>KUCI</h2>
+          <div class="supply">20 SUPPLY</div>
+        </div>
+
+        <div class="price">
+          20 USDC
+        </div>
+
+        <button class="mint-btn" onclick="mint(1,this)">
+          Mint Now
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <img src="https://gateway.pinata.cloud/ipfs/bafybeihvb4f2okfjjplabk2d7leuiivjpa7pc4o4y7vqkynnr6c2bif3oq/beru.jpg">
+
+      <div class="card-content">
+
+        <div class="top-row">
+          <h2>BERU</h2>
+          <div class="supply">20 SUPPLY</div>
+        </div>
+
+        <div class="price">
+          20 USDC
+        </div>
+
+        <button class="mint-btn" onclick="mint(2,this)">
+          Mint Now
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <img src="https://gateway.pinata.cloud/ipfs/bafybeihvb4f2okfjjplabk2d7leuiivjpa7pc4o4y7vqkynnr6c2bif3oq/ora.jpg">
+
+      <div class="card-content">
+
+        <div class="top-row">
+          <h2>ORA</h2>
+          <div class="supply">20 SUPPLY</div>
+        </div>
+
+        <div class="price">
+          20 USDC
+        </div>
+
+        <button class="mint-btn" onclick="mint(3,this)">
+          Mint Now
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <img src="https://gateway.pinata.cloud/ipfs/bafybeihvb4f2okfjjplabk2d7leuiivjpa7pc4o4y7vqkynnr6c2bif3oq/sing.jpg">
+
+      <div class="card-content">
+
+        <div class="top-row">
+          <h2>SING</h2>
+          <div class="supply">20 SUPPLY</div>
+        </div>
+
+        <div class="price">
+          20 USDC
+        </div>
+
+        <button class="mint-btn" onclick="mint(4,this)">
+          Mint Now
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <img src="https://gateway.pinata.cloud/ipfs/bafybeihvb4f2okfjjplabk2d7leuiivjpa7pc4o4y7vqkynnr6c2bif3oq/pisa.jpg">
+
+      <div class="card-content">
+
+        <div class="top-row">
+          <h2>PISA</h2>
+          <div class="supply">20 SUPPLY</div>
+        </div>
+
+        <div class="price">
+          20 USDC
+        </div>
+
+        <button class="mint-btn" onclick="mint(5,this)">
+          Mint Now
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <img src="https://gateway.pinata.cloud/ipfs/bafybeihvb4f2okfjjplabk2d7leuiivjpa7pc4o4y7vqkynnr6c2bif3oq/anji.jpg">
+
+      <div class="card-content">
+
+        <div class="top-row">
+          <h2>ANJI</h2>
+          <div class="supply">20 SUPPLY</div>
+        </div>
+
+        <div class="price">
+          20 USDC
+        </div>
+
+        <button class="mint-btn" onclick="mint(6,this)">
+          Mint Now
+        </button>
+
+      </div>
 
     </div>
 
   </div>
 
-  <div class="hero">
+</div>
 
-    <div class="badge">
-      <div class="dot"></div>
-      LIVE ON ARC TESTNET
-    </div>
+<div class="footer">
+  Built on ARC Testnet • Developed by @abeng0x
+</div>
 
-    <h1>
-      Punks NFT
-      <span class="gradient">
-        on ARC Testnet
-      </span>
-    </h1>
+<div class="x-link">
 
-    <p>
-      A limited ERC1155 NFT collection built on ARC Testnet.
-    </p>
+  <a
+    href="https://x.com/abeng0x"
+    target="_blank"
+  >
+    𝕏 @abeng0x
+  </a>
 
-    <p>
-      Mint Price: 20 USDC • Max Supply: 20 Each • Limit: 1 Per Wallet
-    </p>
+</div>
 
-    <div class="stats">
+<script>
 
-      <div class="stat-box">
-        <h3>TOTAL NFTs</h3>
-        <p>6</p>
-      </div>
+const CONTRACT =
+  "0xaa7f7ebf7324e8842d29beafdbd1cc09191e0a1c";
 
-      <div class="stat-box">
-        <h3>MINT PRICE</h3>
-        <p>20</p>
-      </div>
+const ABI = [
+  "function mint(uint256 id) payable external"
+];
 
-      <div class="stat-box">
-        <h3>SUPPLY</h3>
-        <p>20</p>
-      </div>
+async function connectWallet(){
 
-      <div class="stat-box">
-        <h3>WALLET LIMIT</h3>
-        <p>1</p>
-      </div>
+  try{
 
-    </div>
+    if(!window.ethereum){
 
-    <div class="grid">
+      alert(
+        "Please install MetaMask or OKX Wallet"
+      );
 
-      <div class="card">
-        <img src="https://gateway.pinata.cloud/ipfs/bafybeihvb4f2okfjjplabk2d7leuiivjpa7pc4o4y7vqkynnr6c2bif3oq/kuci.jpg">
-        <div class="card-content">
-          <div class="top-row">
-            <h2>KUCI</h2>
-            <div class="supply">20 SUPPLY</div>
-          </div>
-          <div class="price">20 USDC</div>
-          <button class="mint-btn" onclick="mint(1,this)">
-            Mint Now
-          </button>
-        </div>
-      </div>
+      return;
+    }
 
-      <div class="card">
-        <img src="https://gateway.pinata.cloud/ipfs/bafybeihvb4f2okfjjplabk2d7leuiivjpa7pc4o4y7vqkynnr6c2bif3oq/beru.jpg">
-        <div class="card-content">
-          <div class="top-row">
-            <h2>BERU</h2>
-            <div class="supply">20 SUPPLY</div>
-          </div>
-          <div class="price">20 USDC</div>
-          <button class="mint-btn" onclick="mint(2,this)">
-            Mint Now
-          </button>
-        </div>
-      </div>
+    const accounts =
+      await window.ethereum.request({
+        method:"eth_requestAccounts"
+      });
 
-      <div class="card">
-        <img src="https://gateway.pinata.cloud/ipfs/bafybeihvb4f2okfjjplabk2d7leuiivjpa7pc4o4y7vqkynnr6c2bif3oq/ora.jpg">
-        <div class="card-content">
-          <div class="top-row">
-            <h2>ORA</h2>
-            <div class="supply">20 SUPPLY</div>
-          </div>
-          <div class="price">20 USDC</div>
-          <button class="mint-btn" onclick="mint(3,this)">
-            Mint Now
-          </button>
-        </div>
-      </div>
+    const wallet =
+      accounts[0];
 
-      <div class="card">
-        <img src="https://gateway.pinata.cloud/ipfs/bafybeihvb4f2okfjjplabk2d7leuiivjpa7pc4o4y7vqkynnr6c2bif3oq/sing.jpg">
-        <div class="card-content">
-          <div class="top-row">
-            <h2>SING</h2>
-            <div class="supply">20 SUPPLY</div>
-          </div>
-          <div class="price">20 USDC</div>
-          <button class="mint-btn" onclick="mint(4,this)">
-            Mint Now
-          </button>
-        </div>
-      </div>
+    const short =
+      wallet.slice(0,6)
+      + "..."
+      + wallet.slice(-4);
 
-      <div class="card">
-        <img src="https://gateway.pinata.cloud/ipfs/bafybeihvb4f2okfjjplabk2d7leuiivjpa7pc4o4y7vqkynnr6c2bif3oq/pisa.jpg">
-        <div class="card-content">
-          <div class="top-row">
-            <h2>PISA</h2>
-            <div class="supply">20 SUPPLY</div>
-          </div>
-          <div class="price">20 USDC</div>
-          <button class="mint-btn" onclick="mint(5,this)">
-            Mint Now
-          </button>
-        </div>
-      </div>
+    document.getElementById(
+      "connectButton"
+    ).innerText = short;
 
-      <div class="card">
-        <img src="https://gateway.pinata.cloud/ipfs/bafybeihvb4f2okfjjplabk2d7leuiivjpa7pc4o4y7vqkynnr6c2bif3oq/anji.jpg">
-        <div class="card-content">
-          <div class="top-row">
-            <h2>ANJI</h2>
-            <div class="supply">20 SUPPLY</div>
-          </div>
-          <div class="price">20 USDC</div>
-          <button class="mint-btn" onclick="mint(6,this)">
-            Mint Now
-          </button>
-        </div>
-      </div>
+    document.getElementById(
+      "disconnectButton"
+    ).style.display = "block";
 
-    </div>
+  }catch(err){
 
-  </div>
+    console.log(err);
 
-  <div class="footer">
-    Built on ARC Testnet • Developed by: Abeng
-  </div>
+    alert(
+      "Wallet connection failed"
+    );
+  }
 
-  <div class="x-link">
-    <a href="https://x.com/abeng0x" target="_blank">
-      𝕏 @abeng0x
-    </a>
-  </div>
+}
 
-  <script>
+function disconnectWallet(){
 
-    const CONTRACT =
-      "0xaa7f7ebf7324e8842d29beafdbd1cc09191e0a1c";
+  document.getElementById(
+    "connectButton"
+  ).innerText =
+    "Connect Wallet";
 
-    const ABI = [
-      "function mint(uint256 id) payable external"
-    ];
+  document.getElementById(
+    "disconnectButton"
+  ).style.display =
+    "none";
+}
 
-    async function connectWallet(){
+async function mint(id,button){
 
-      try{
+  try{
 
-        if(!window.ethereum){
+    if(!window.ethereum){
 
-          alert(
-            "Please install MetaMask or OKX Wallet"
-          );
+      alert(
+        "Wallet not detected"
+      );
 
-          return;
+      return;
+    }
+
+    button.innerText =
+      "Minting...";
+
+    button.disabled = true;
+
+    const provider =
+      new ethers.BrowserProvider(
+        window.ethereum
+      );
+
+    const signer =
+      await provider.getSigner();
+
+    const contract =
+      new ethers.Contract(
+        CONTRACT,
+        ABI,
+        signer
+      );
+
+    const tx =
+      await contract.mint(
+        id,
+        {
+          value:
+            ethers.parseEther("20")
         }
+      );
 
-        const accounts =
-          await window.ethereum.request({
-            method:"eth_requestAccounts"
-          });
+    alert(
+      "Transaction submitted"
+    );
 
-        const wallet =
-          accounts[0];
+    await tx.wait();
 
-        const short =
-          wallet.slice(0,6)
-          + "..."
-          + wallet.slice(-4);
+    button.innerText =
+      "Minted";
 
-        document.getElementById(
-          "connectButton"
-        ).innerText = short;
+    alert(
+      "Mint successful"
+    );
 
-        document.getElementById(
-          "disconnectButton"
-        ).style.display = "block";
+  }catch(err){
 
-      }catch(err){
+    console.log(err);
 
-        console.log(err);
+    button.innerText =
+      "Mint Now";
 
-        alert(
-          "Wallet connection failed"
-        );
-      }
-    }
+    button.disabled = false;
 
-    function disconnectWallet(){
+    alert(
+      "Mint failed"
+    );
+  }
 
-      document.getElementById(
-        "connectButton"
-      ).innerText =
-        "Connect Wallet";
+}
 
-      document.getElementById(
-        "disconnectButton"
-      ).style.display =
-        "none";
-    }
-
-    async function mint(id,button){
-
-      try{
-
-        if(!window.ethereum){
-
-          alert(
-            "Wallet not detected"
-          );
-
-          return;
-        }
-
-        button.innerText =
-          "Minting...";
-
-        button.disabled = true;
-
-        const provider =
-          new ethers.BrowserProvider(
-            window.ethereum
-          );
-
-        const signer =
-          await provider.getSigner();
-
-        const contract =
-          new ethers.Contract(
-            CONTRACT,
-            ABI,
-            signer
-          );
-
-        const tx =
-          await contract.mint(
-            id,
-            {
-              value:
-                ethers.parseEther("20")
-            }
-          );
-
-        alert(
-          "Transaction submitted"
-        );
-
-        await tx.wait();
-
-        button.innerText =
-          "Minted";
-
-        alert(
-          "Mint successful"
-        );
-
-      }catch(err){
-
-        console.log(err);
-
-        button.innerText =
-          "Mint Now";
-
-        button.disabled = false;
-
-        alert(
-          "Mint failed"
-        );
-      }
-    }
-
-  </script>
+</script>
 
 </body>
 </html>
