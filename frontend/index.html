@@ -434,43 +434,45 @@ const ABI = [
   "function mint(uint256 id) payable"
 ];
 
+let provider;
 let signer;
 
 async function connectWallet(){
 
   try{
 
-    if(typeof window.ethereum === "undefined"){
-      alert("Please install MetaMask");
+    if(!window.ethereum){
+      alert("MetaMask not detected");
       return;
     }
 
-    await window.ethereum.request({
-      method:"eth_requestAccounts"
-    });
+    provider =
+      new ethers.providers.Web3Provider(window.ethereum);
 
-    const provider =
-    new ethers.providers.Web3Provider(
-      window.ethereum
+    await provider.send(
+      "eth_requestAccounts",
+      []
     );
 
     signer = provider.getSigner();
 
     const address =
-    await signer.getAddress();
+      await signer.getAddress();
 
     document.getElementById(
       "connectBtn"
     ).innerText =
-    address.slice(0,6) +
-    "..." +
-    address.slice(-4);
+      address.slice(0,6) +
+      "..." +
+      address.slice(-4);
+
+    console.log("Connected:", address);
 
   }catch(err){
 
     console.log(err);
 
-    alert("Wallet connection failed");
+    alert(err.message);
 
   }
 
@@ -486,20 +488,20 @@ async function mint(id){
     }
 
     const contract =
-    new ethers.Contract(
-      CONTRACT,
-      ABI,
-      signer
-    );
+      new ethers.Contract(
+        CONTRACT,
+        ABI,
+        signer
+      );
 
     const tx =
-    await contract.mint(
-      id,
-      {
-        value:
-        ethers.utils.parseEther("20")
-      }
-    );
+      await contract.mint(
+        id,
+        {
+          value:
+          ethers.utils.parseEther("20")
+        }
+      );
 
     alert("Mint submitted");
 
@@ -511,7 +513,7 @@ async function mint(id){
 
     console.log(err);
 
-    alert("Mint failed");
+    alert(err.message);
 
   }
 
