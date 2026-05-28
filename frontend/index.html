@@ -66,11 +66,6 @@ header{
   color:black;
   font-weight:800;
   cursor:pointer;
-  transition:.2s;
-}
-
-.wallet-btn:hover{
-  transform:translateY(-2px);
 }
 
 .hero{
@@ -107,12 +102,10 @@ header{
   border-radius:18px;
   overflow:hidden;
   transition:.25s;
-  backdrop-filter:blur(10px);
 }
 
 .card:hover{
   transform:translateY(-5px);
-  border-color:rgba(255,255,255,0.18);
 }
 
 .nft-img{
@@ -149,11 +142,6 @@ header{
   font-weight:900;
   cursor:pointer;
   margin-bottom:10px;
-  transition:.2s;
-}
-
-.mint-btn:hover{
-  transform:translateY(-2px);
 }
 
 .explorer-btn{
@@ -249,9 +237,7 @@ Mint exclusive Punks NFT collection built on ARC Testnet.
 
 <div class="card">
 <img src="./img/kuci.jpg" class="nft-img">
-
 <div class="content">
-
 <div class="nft-name">KUCI</div>
 
 <div class="meta">
@@ -264,7 +250,7 @@ MINT
 </button>
 
 <a
-href="https://testnet.arcscan.app/address/0x286fa0922e3dda55c361933fac736f987244f7dd"
+href="https://testnet.arcscan.app/address/0x91e7abd694028dc4c9d9449e069c278780e9c83f"
 target="_blank"
 class="explorer-btn"
 >
@@ -276,9 +262,7 @@ EXPLORER
 
 <div class="card">
 <img src="./img/beru.jpg" class="nft-img">
-
 <div class="content">
-
 <div class="nft-name">BERU</div>
 
 <div class="meta">
@@ -291,7 +275,7 @@ MINT
 </button>
 
 <a
-href="https://testnet.arcscan.app/address/0x286fa0922e3dda55c361933fac736f987244f7dd"
+href="https://testnet.arcscan.app/address/0x91e7abd694028dc4c9d9449e069c278780e9c83f"
 target="_blank"
 class="explorer-btn"
 >
@@ -303,9 +287,7 @@ EXPLORER
 
 <div class="card">
 <img src="./img/anji.jpg" class="nft-img">
-
 <div class="content">
-
 <div class="nft-name">ANJI</div>
 
 <div class="meta">
@@ -318,7 +300,7 @@ MINT
 </button>
 
 <a
-href="https://testnet.arcscan.app/address/0x286fa0922e3dda55c361933fac736f987244f7dd"
+href="https://testnet.arcscan.app/address/0x91e7abd694028dc4c9d9449e069c278780e9c83f"
 target="_blank"
 class="explorer-btn"
 >
@@ -330,9 +312,7 @@ EXPLORER
 
 <div class="card">
 <img src="./img/ora.jpg" class="nft-img">
-
 <div class="content">
-
 <div class="nft-name">ORA</div>
 
 <div class="meta">
@@ -345,7 +325,7 @@ MINT
 </button>
 
 <a
-href="https://testnet.arcscan.app/address/0x286fa0922e3dda55c361933fac736f987244f7dd"
+href="https://testnet.arcscan.app/address/0x91e7abd694028dc4c9d9449e069c278780e9c83f"
 target="_blank"
 class="explorer-btn"
 >
@@ -357,9 +337,7 @@ EXPLORER
 
 <div class="card">
 <img src="./img/pisa.jpg" class="nft-img">
-
 <div class="content">
-
 <div class="nft-name">PISA</div>
 
 <div class="meta">
@@ -372,7 +350,7 @@ MINT
 </button>
 
 <a
-href="https://testnet.arcscan.app/address/0x286fa0922e3dda55c361933fac736f987244f7dd"
+href="https://testnet.arcscan.app/address/0x91e7abd694028dc4c9d9449e069c278780e9c83f"
 target="_blank"
 class="explorer-btn"
 >
@@ -384,9 +362,7 @@ EXPLORER
 
 <div class="card">
 <img src="./img/sing.jpg" class="nft-img">
-
 <div class="content">
-
 <div class="nft-name">SING</div>
 
 <div class="meta">
@@ -399,7 +375,7 @@ MINT
 </button>
 
 <a
-href="https://testnet.arcscan.app/address/0x286fa0922e3dda55c361933fac736f987244f7dd"
+href="https://testnet.arcscan.app/address/0x91e7abd694028dc4c9d9449e069c278780e9c83f"
 target="_blank"
 class="explorer-btn"
 >
@@ -427,6 +403,13 @@ BUILD ON ARC TESTNET
 
 <script>
 
+const CONTRACT =
+"0x91e7abd694028dc4c9d9449e069c278780e9c83f";
+
+const ABI = [
+  "function mint(uint256 id) payable"
+];
+
 async function connectWallet(){
 
   try{
@@ -453,6 +436,7 @@ async function connectWallet(){
   }catch(err){
 
     console.log(err);
+
     alert("Wallet connection failed");
 
   }
@@ -461,9 +445,50 @@ async function connectWallet(){
 
 async function mint(id){
 
-  alert(
-    "Mint function temporarily disabled"
-  );
+  try{
+
+    if(!window.ethereum){
+      alert("Install MetaMask");
+      return;
+    }
+
+    const provider =
+      new ethers.providers.Web3Provider(
+        window.ethereum
+      );
+
+    const signer =
+      provider.getSigner();
+
+    const contract =
+      new ethers.Contract(
+        CONTRACT,
+        ABI,
+        signer
+      );
+
+    const tx =
+      await contract.mint(
+        id,
+        {
+          value:
+          ethers.utils.parseEther("20")
+        }
+      );
+
+    alert("Mint submitted");
+
+    await tx.wait();
+
+    alert("Mint success");
+
+  }catch(err){
+
+    console.log(err);
+
+    alert("Mint failed");
+
+  }
 
 }
 

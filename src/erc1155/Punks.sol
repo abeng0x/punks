@@ -6,24 +6,18 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Punks is ERC1155, Ownable {
 
-    string public name = "Punks NFT";
-
-    string public symbol = "PUNKS";
-
-    uint256 public constant PRICE = 20 ether;
-
-    uint256 public constant MAX_SUPPLY = 20;
-
-    mapping(uint256 => uint256) public totalMinted;
-
-    mapping(address => mapping(uint256 => bool)) public minted;
-
     mapping(uint256 => string) private tokenURIs;
 
-    constructor()
-        ERC1155("")
-        Ownable(msg.sender)
-    {
+    uint256 public constant KUCI = 1;
+    uint256 public constant BERU = 2;
+    uint256 public constant ANJI = 3;
+    uint256 public constant ORA  = 4;
+    uint256 public constant PISA = 5;
+    uint256 public constant SING = 6;
+
+    uint256 public mintPrice = 20 ether;
+
+    constructor() ERC1155("") Ownable(msg.sender) {
 
         tokenURIs[1] =
         "https://gateway.pinata.cloud/ipfs/bafybeifrpej2h7gli45tjdoip2mwe4a2obuenesbmyx2psefbfv5ldngxq/1.json";
@@ -42,18 +36,23 @@ contract Punks is ERC1155, Ownable {
 
         tokenURIs[6] =
         "https://gateway.pinata.cloud/ipfs/bafybeifrpej2h7gli45tjdoip2mwe4a2obuenesbmyx2psefbfv5ldngxq/6.json";
+
     }
 
-    function uri(uint256 id)
+    function uri(
+        uint256 tokenId
+    )
         public
         view
         override
         returns (string memory)
     {
-        return tokenURIs[id];
+        return tokenURIs[tokenId];
     }
 
-    function mint(uint256 id)
+    function mint(
+        uint256 id
+    )
         external
         payable
     {
@@ -64,23 +63,9 @@ contract Punks is ERC1155, Ownable {
         );
 
         require(
-            msg.value == PRICE,
-            "Wrong price"
+            msg.value >= mintPrice,
+            "Not enough ARC"
         );
-
-        require(
-            totalMinted[id] < MAX_SUPPLY,
-            "Sold out"
-        );
-
-        require(
-            !minted[msg.sender][id],
-            "Already minted"
-        );
-
-        minted[msg.sender][id] = true;
-
-        totalMinted[id]++;
 
         _mint(
             msg.sender,
@@ -88,6 +73,7 @@ contract Punks is ERC1155, Ownable {
             1,
             ""
         );
+
     }
 
     function withdraw()
@@ -98,6 +84,7 @@ contract Punks is ERC1155, Ownable {
         payable(owner()).transfer(
             address(this).balance
         );
+
     }
 
 }
